@@ -1,0 +1,92 @@
+<div style="max-width:420px;margin-bottom:12px;">
+  <input id="searchInput"
+    placeholder="Search products..."
+    style="padding:12px;width:100%;font-size:16px;border:1px solid #ccc;border-radius:8px;" />
+</div>
+
+<div id="status">Loading products...</div>
+<div id="results"></div>
+
+<script>
+
+const BASE_ID = "apph6wlZKiRLkKk8k";
+const TABLE_NAME = "Table 1";
+const TOKEN = "YOUR_NEW_TOKEN_HERE";
+
+let products = [];
+
+async function loadProducts() {
+
+  const res = await fetch(
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+    {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    }
+  );
+
+  const data = await res.json();
+
+  products = data.records.map(r => ({
+    id: r.id,
+    name: r.fields["Product Name"] || "",
+    brand: r.fields["Brand"] || "",
+    barcode: r.fields["barcode"] || "",
+    size: r.fields["Size"] || "",
+    type: r.fields["Product Type"] || "",
+    ingredients: r.fields["Ingredients"] || "",
+    rating: r.fields["Rating"] || "",
+    image: r.fields["Product Image"]
+  }));
+
+  document.getElementById("status").innerText =
+    `Loaded ${products.length} products`;
+
+  render(products);
+}
+
+function render(list) {
+
+  const box = document.getElementById("results");
+  box.innerHTML = "";
+
+  list.forEach(p => {
+
+    const div = document.createElement("div");
+
+    div.style.border = "1px solid #ddd";
+    div.style.padding = "12px";
+    div.style.marginBottom = "10px";
+    div.style.borderRadius = "8px";
+    div.style.cursor = "pointer";
+
+    div.innerHTML = `
+      <div><b>${p.name}</b></div>
+      <div>${p.brand}</div>
+      <div>Rating: ${p.rating}</div>
+    `;
+
+    div.onclick = () => {
+      window.location.href = `product.html?id=${p.id}`;
+    };
+
+    box.appendChild(div);
+  });
+}
+
+document.getElementById("searchInput")
+.addEventListener("input", (e) => {
+
+  const value = e.target.value.toLowerCase();
+
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(value)
+  );
+
+  render(filtered);
+});
+
+loadProducts();
+
+</script>
