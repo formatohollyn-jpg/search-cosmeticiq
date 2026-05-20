@@ -1,7 +1,7 @@
 <div style="max-width:420px;margin-bottom:12px;">
   <input id="searchInput"
     placeholder="Search products..."
-    style="padding:12px;width:100%;font-size:16px;border:1px solid #ccc;border-radius:8px;" />
+    style="padding:14px;width:100%;font-size:16px;border:1px solid #ccc;border-radius:12px;" />
 </div>
 
 <div id="status">Loading products...</div>
@@ -50,7 +50,7 @@ function render(list) {
   list.forEach(p => {
 
     const div = document.createElement("div");
-
+    
     div.innerHTML = `
       <div><b>${p.name}</b></div>
       <div>${p.type}</div>
