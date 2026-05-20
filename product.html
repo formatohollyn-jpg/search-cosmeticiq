@@ -39,26 +39,31 @@ async function loadProduct() {
 
   const f = data.fields;
 
-  document.getElementById("product").innerHTML = `
-    <div style="max-width:500px;margin:auto;font-family:Arial;">
+ document.getElementById("product").innerHTML = `
+  <div style="
+    max-width:500px;
+    margin:auto;
+    font-family:Arial;
+    background:#fff;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+  ">
 
-      <h1>${f["Product Name"] || ""}</h1>
+    <h1 style="margin-bottom:10px;">${f["Product Name"] || ""}</h1>
 
-      ${f["Product Image"] ? `
-        <img src="${f["Product Image"][0]?.url || ""}"
-        style="width:300px;border-radius:10px;" />
-      ` : ""}
+    <img src="${f["Product Image"]?.[0]?.url || ""}"
+      style="width:100%;border-radius:12px;margin-bottom:15px;" />
 
-      <p><b>Brand:</b> ${f["Brand"] || ""}</p>
-      <p><b>Type:</b> ${f["Product Type"] || ""}</p>
-      <p><b>Size:</b> ${f["Size"] || ""}</p>
-      <p><b>Rating:</b> ${f["Rating"] || ""}</p>
+    <p><b>Brand:</b> ${f["Brand"] || ""}</p>
+    <p><b>Type:</b> ${f["Product Type"] || ""}</p>
+    <p><b>Rating:</b> ⭐ ${f["Rating"] || ""}</p>
 
-      <h3>Ingredients</h3>
-      <p>${f["Ingredients"] || ""}</p>
+    <h3 style="margin-top:15px;">Ingredients</h3>
+    <p>${f["Ingredients"] || ""}</p>
 
-    </div>
-  `;
+  </div>
+`;
 }
 
 loadProduct();
