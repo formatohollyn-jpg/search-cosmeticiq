@@ -26,13 +26,45 @@ const id = new URLSearchParams(window.location.search).get("id");
 
 async function loadProduct() {
 
-  const url =
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`;
+  console.log("Page loaded");
 
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`
-    }
+  const id = new URLSearchParams(window.location.search).get("id");
+
+  console.log("Product ID from URL:", id);
+
+  if (!id) {
+    document.getElementById("product").innerText = "No product ID in URL";
+    return;
+  }
+
+  try {
+
+    const url =
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`;
+
+    console.log("Fetching:", url);
+
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    });
+
+    console.log("Status:", res.status);
+
+    const text = await res.text();
+    console.log("RAW RESPONSE:", text);
+
+    const data = JSON.parse(text);
+
+    const f = data.fields;
+
+    document.getElementById("product").innerHTML = `
+      <h1>${f["Product Name"]}</h1>
+      <img src="${f["Product Image"]?.[0]?.url || ""}" />
+      <p>${f["Brand"]}</p>
+      <p>${f["Product Type"]}</p>
+       }
   });
 
   const data = await res.json();
