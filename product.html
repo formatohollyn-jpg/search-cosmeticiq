@@ -39,29 +39,52 @@ async function loadProduct() {
 
   const f = data.fields;
 
- document.getElementById("product").innerHTML = `
+document.getElementById("product").innerHTML = `
   <div style="
-    max-width:500px;
-    margin:auto;
-    font-family:Arial;
-    background:#fff;
+    max-width:520px;
+    margin:40px auto;
     padding:20px;
+    font-family: Arial, sans-serif;
+    background:#ffffff;
     border-radius:16px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
   ">
 
-    <h1 style="margin-bottom:10px;">${f["Product Name"] || ""}</h1>
+    <h1 style="
+      font-size:24px;
+      margin-bottom:10px;
+      color:#111;
+    ">
+      ${f["Product Name"]}
+    </h1>
 
-    <img src="${f["Product Image"]?.[0]?.url || ""}"
-      style="width:100%;border-radius:12px;margin-bottom:15px;" />
+    <img src="${f["Product Image"]?.[0]?.url || ""}" 
+      style="
+        width:100%;
+        max-height:320px;
+        object-fit:cover;
+        border-radius:12px;
+        margin-bottom:15px;
+      " />
 
-    <p><b>Brand:</b> ${f["Brand"] || ""}</p>
-    <p><b>Type:</b> ${f["Product Type"] || ""}</p>
-    <p><b>Rating:</b> ⭐ ${f["Rating"] || ""}</p>
+    <div style="font-size:14px; color:#444; line-height:1.6;">
 
-    <h3 style="margin-top:15px;">Ingredients</h3>
-    <p>${f["Ingredients"] || ""}</p>
+      <p><b>Brand:</b> ${f["Brand"]}</p>
+      <p><b>Type:</b> ${f["Product Type"]}</p>
+      <p><b>Rating:</b> ⭐ ${f["Rating"]}</p>
 
+      <div style="margin-top:15px;">
+        <h3 style="margin-bottom:8px;">Ingredients</h3>
+        <p style="
+          background:#f7f7f7;
+          padding:10px;
+          border-radius:10px;
+        ">
+          ${f["Ingredients"]}
+        </p>
+      </div>
+
+    </div>
   </div>
 `;
 }
