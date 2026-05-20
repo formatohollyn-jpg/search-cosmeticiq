@@ -24,12 +24,24 @@ async function loadProduct() {
   const f = data.fields;
 
   document.getElementById("product").innerHTML = `
-    <h1>${f["Product Name"]}</h1>
-    <img src="${f["Product Image"]?.[0]?.url || ""}" />
-    <p>${f["Brand"]}</p>
-    <p>${f["Product Type"]}</p>
-    <p>${f["Rating"]}</p>
-    <p>${f["Ingredients"]}</p>
+    <div style="max-width:500px;margin:auto;font-family:Arial;">
+
+      <h1>${f["Product Name"] || ""}</h1>
+
+      ${f["Product Image"] ? `
+        <img src="${f["Product Image"][0]?.url || ""}"
+        style="width:300px;border-radius:10px;" />
+      ` : ""}
+
+      <p><b>Brand:</b> ${f["Brand"] || ""}</p>
+      <p><b>Type:</b> ${f["Product Type"] || ""}</p>
+      <p><b>Size:</b> ${f["Size"] || ""}</p>
+      <p><b>Rating:</b> ${f["Rating"] || ""}</p>
+
+      <h3>Ingredients</h3>
+      <p>${f["Ingredients"] || ""}</p>
+
+    </div>
   `;
 }
 
