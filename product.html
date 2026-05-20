@@ -25,26 +25,22 @@ async function loadProduct() {
   const f = data.fields;
 
   document.getElementById("product").innerHTML = `
-    <div style="max-width:500px;margin:auto;font-family:Arial;">
+  <div style="padding:15px;">
+  <button onclick="window.location.href='index.html'"
+    style="
+      padding:10px 14px;
+      border:none;
+      border-radius:8px;
+      background:#111;
+      color:white;
+      cursor:pointer;
+      margin-bottom:15px;
+    ">
+    ← Back to Search
+  </button>
 
-      <h1>${f["Product Name"] || ""}</h1>
-
-      ${f["Product Image"] ? `
-        <img src="${f["Product Image"][0]?.url || ""}"
-        style="width:300px;border-radius:10px;" />
-      ` : ""}
-
-      <p><b>Brand:</b> ${f["Brand"] || ""}</p>
-      <p><b>Type:</b> ${f["Product Type"] || ""}</p>
-      <p><b>Size:</b> ${f["Size"] || ""}</p>
-      <p><b>Rating:</b> ${f["Rating"] || ""}</p>
-
-      <h3>Ingredients</h3>
-      <p>${f["Ingredients"] || ""}</p>
-
-    </div>
-  `;
-}
+  <div id="product">Loading...</div>
+</div>
 
 loadProduct();
 
