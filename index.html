@@ -16,52 +16,6 @@ const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3
 let products = [];
 
 async function loadProducts() {
-  try {
-
-    console.log("Starting fetch...");
-
-    const res = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`
-        }
-      }
-    );
-
-    console.log("STATUS:", res.status);
-
-    const text = await res.text();
-    console.log("RAW RESPONSE:", text);
-
-    const data = JSON.parse(text);
-
-    if (!data.records) {
-      document.getElementById("status").innerText =
-        "No records found or API error";
-      return;
-    }
-
-    products = data.records.map(r => ({
-      id: r.id,
-      name: r.fields["Product Name"] || "",
-      brand: r.fields["Brand"] || "",
-      type: r.fields["Product Type"] || "",
-      rating: r.fields["Rating"] || "",
-      image: r.fields["Product Image"]
-    }));
-
-    document.getElementById("status").innerText =
-      `Loaded ${products.length} products`;
-
-    render(products);
-
-  } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText =
-      "Error loading products (check console)";
-  }
-}
 
   const res = await fetch(
     `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
@@ -78,10 +32,7 @@ async function loadProducts() {
     id: r.id,
     name: r.fields["Product Name"] || "",
     brand: r.fields["Brand"] || "",
-    barcode: r.fields["barcode"] || "",
-    size: r.fields["Size"] || "",
     type: r.fields["Product Type"] || "",
-    ingredients: r.fields["Ingredients"] || "",
     rating: r.fields["Rating"] || "",
     image: r.fields["Product Image"]
   }));
@@ -96,50 +47,19 @@ function render(list) {
   const box = document.getElementById("results");
   box.innerHTML = "";
 
-  if (list.length === 0) {
-    box.innerHTML = "<p>No products found.</p>";
-    return;
-  }
-
   list.forEach(p => {
+
     const div = document.createElement("div");
 
-    div.style.display = "flex";
-    div.style.gap = "12px";
-    div.style.alignItems = "center";
-    div.style.border = "1px solid #eee";
-    div.style.padding = "12px";
-    div.style.marginBottom = "10px";
-    div.style.borderRadius = "12px";
-    div.style.cursor = "pointer";
-    div.style.background = "#fff";
-    div.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)";
-    div.style.transition = "0.2s";
-
-    div.onmouseover = () => div.style.transform = "scale(1.01)";
-    div.onmouseout = () => div.style.transform = "scale(1)";
-
     div.innerHTML = `
-      <img src="${p.image?.[0]?.url || ""}"
-        style="width:60px;height:60px;object-fit:cover;border-radius:10px;" />
-
-      <div style="flex:1;">
-        <div style="font-weight:600;font-size:14px;">${p.name}</div>
-        <div style="font-size:12px;color:gray;">${p.brand}</div>
-        <div style="font-size:12px;color:#666;">⭐ ${p.rating || "N/A"}</div>
-      </div>
+      <div><b>${p.name}</b></div>
+      <div>${p.type}</div>
+      <div>${p.rating}</div>
     `;
 
     div.onclick = () => {
       window.location.href =
-        "https://YOUR-GITHUB-URL/product.html?id=" + p.id;
-    };
-
-    box.appendChild(div);
-  });
-
-    div.onclick = () => {
-      window.location.href = `product.html?id=${p.id}`;
+        "product.html?id=" + p.id;
     };
 
     box.appendChild(div);
