@@ -48,23 +48,33 @@ function render(list) {
   box.innerHTML = "";
 
   list.forEach(p => {
-
     const div = document.createElement("div");
 
+    div.style.display = "flex";
+    div.style.gap = "12px";
+    div.style.alignItems = "center";
+    div.style.border = "1px solid #eee";
+    div.style.padding = "12px";
+    div.style.marginBottom = "10px";
+    div.style.borderRadius = "12px";
+    div.style.cursor = "pointer";
+    div.style.background = "#fff";
+    div.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)";
+    div.style.transition = "0.2s";
+
+    div.onmouseover = () => div.style.transform = "scale(1.01)";
+    div.onmouseout = () => div.style.transform = "scale(1)";
+
     div.innerHTML = `
-      <div><b>${p.name}</b></div>
-      <div>${p.type}</div>
-      <div>${p.rating}</div>
+      <img src="${p.image?.[0]?.url || ""}"
+        style="width:60px;height:60px;object-fit:cover;border-radius:10px;" />
+
+      <div style="flex:1;">
+        <div style="font-weight:600;font-size:14px;">${p.name}</div>
+        <div style="font-size:12px;color:gray;">${p.brand}</div>
+        <div style="font-size:12px;color:#666;">⭐ ${p.rating || "N/A"}</div>
+      </div>
     `;
-
-    div.onclick = () => {
-      window.location.href =
-        "product.html?id=" + p.id;
-    };
-
-    box.appendChild(div);
-  });
-}
 
 document.getElementById("searchInput")
 .addEventListener("input", (e) => {
