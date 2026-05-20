@@ -60,31 +60,11 @@ async function loadProduct() {
     document.getElementById("product").innerText =
       "Error loading product (check console)";
   }
-
-    <div style="font-size:14px; color:#444; line-height:1.6;">
-
-      <p><b>Brand:</b> ${f["Brand"] || ""}</p>
-      <p><b>Type:</b> ${f["Product Type"] || ""}</p>
-      <p><b>Size:</b> ${f["Size"] || ""}</p>
-      <p><b>Rating:</b> ⭐ ${f["Rating"] || ""}</p>
-
-      <div style="margin-top:15px;">
-        <h3 style="margin-bottom:8px;">Ingredients</h3>
-        <div style="
-          background:#f6f6f6;
-          padding:12px;
-          border-radius:12px;
-          font-size:13px;
-          white-space:pre-wrap;
-        ">
-          ${f["Ingredients"] || ""}
-        </div>
-      </div>
-
-    </div>
-  </div>
-`;
 }
+
+loadProduct();
+
+</script>
 
 loadProduct();
 
