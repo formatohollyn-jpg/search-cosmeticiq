@@ -1,21 +1,11 @@
-<div style="
-  display:flex;
-  justify-content:center;
-  margin:30px 0 15px;
-">
+<div style="max-width:420px;margin-bottom:12px;">
   <input id="searchInput"
     placeholder="Search products..."
-    style="
-      padding:14px;
-      width:100%;
-      max-width:420px;
-      font-size:16px;
-      border:1px solid #ddd;
-      border-radius:12px;
-      outline:none;
-      box-shadow:0 4px 12px rgba(0,0,0,0.05);
-    " />
+    style="padding:12px;width:100%;font-size:16px;border:1px solid #ccc;border-radius:8px;" />
 </div>
+
+<div id="status">Loading products...</div>
+<div id="results"></div>
 
 <script>
 
@@ -42,10 +32,7 @@ async function loadProducts() {
     id: r.id,
     name: r.fields["Product Name"] || "",
     brand: r.fields["Brand"] || "",
-    barcode: r.fields["barcode"] || "",
-    size: r.fields["Size"] || "",
     type: r.fields["Product Type"] || "",
-    ingredients: r.fields["Ingredients"] || "",
     rating: r.fields["Rating"] || "",
     image: r.fields["Product Image"]
   }));
@@ -57,7 +44,6 @@ async function loadProducts() {
 }
 
 function render(list) {
-
   const box = document.getElementById("results");
   box.innerHTML = "";
 
@@ -65,27 +51,23 @@ function render(list) {
 
     const div = document.createElement("div");
 
-    div.style.border = "1px solid #ddd";
-    div.style.padding = "12px";
-    div.style.marginBottom = "10px";
-    div.style.borderRadius = "8px";
-    div.style.cursor = "pointer";
-
     div.innerHTML = `
       <div><b>${p.name}</b></div>
-      <div>${p.brand}</div>
-      <div>Rating: ${p.rating}</div>
+      <div>${p.type}</div>
+      <div>${p.rating}</div>
     `;
 
     div.onclick = () => {
-      window.location.href = `product.html?id=${p.id}`;
+      window.location.href =
+        "product.html?id=" + p.id;
     };
 
     box.appendChild(div);
   });
 }
 
-document.getElementById("searchInput").addEventListener("input", (e) => {
+document.getElementById("searchInput")
+.addEventListener("input", (e) => {
 
   const value = e.target.value.toLowerCase();
 
