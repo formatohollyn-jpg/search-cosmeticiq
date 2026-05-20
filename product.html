@@ -1,4 +1,4 @@
-<div id="product">Loading...</div>
+<div id="product">Loading product...</div>
 
 <script>
 
@@ -6,8 +6,7 @@ const BASE_ID = "apph6wlZKiRLkKk8k";
 const TABLE_NAME = "Table 1";
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
-const id =
-  new URLSearchParams(window.location.search).get("id");
+const id = new URLSearchParams(window.location.search).get("id");
 
 async function loadProduct() {
 
@@ -25,22 +24,14 @@ async function loadProduct() {
   const f = data.fields;
 
   document.getElementById("product").innerHTML = `
-  <div style="padding:15px;">
-  <button onclick="window.location.href='index.html'"
-    style="
-      padding:10px 14px;
-      border:none;
-      border-radius:8px;
-      background:#111;
-      color:white;
-      cursor:pointer;
-      margin-bottom:15px;
-    ">
-    ← Back to Search
-  </button>
-
-  <div id="product">Loading...</div>
-</div>
+    <h1>${f["Product Name"]}</h1>
+    <img src="${f["Product Image"]?.[0]?.url || ""}" />
+    <p>${f["Brand"]}</p>
+    <p>${f["Product Type"]}</p>
+    <p>${f["Rating"]}</p>
+    <p>${f["Ingredients"]}</p>
+  `;
+}
 
 loadProduct();
 
