@@ -130,8 +130,12 @@ async function loadProduct() {
 
     const imgUrl = p.image?.[0]?.url;
 
-    document.getElementById("content").innerHTML = `
-      <div class="container">
+   document.getElementById("content").innerHTML = `
+  <button class="back-btn" onclick="window.location.href='search.html'">
+    ← Back
+  </button>
+
+  <div class="container">
 
         <div class="image-box">
           ${imgUrl ? `<img src="${imgUrl}">` : `<div style="height:300px;background:#eee;border-radius:16px;"></div>`}
@@ -150,14 +154,19 @@ async function loadProduct() {
 
   <button onclick="window.location.href='index.html'"
     style="
-      margin-top: 20px;
-      padding: 10px 14px;
-      border: none;
-      border-radius: 10px;
-      background: #000;
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
+    .back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #000;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 1000;
+}
     ">
     ← Back to Search
   </button>
