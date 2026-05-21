@@ -1,101 +1,136 @@
-<div style="max-width:420px;margin-bottom:12px;">
+<div style="
+  background:#f7f7f7;
+  min-height:100vh;
+  padding-top:60px;
+  font-family:Arial,sans-serif;
+">
+
+<div style="max-width:420px;margin:0 auto 16px;">
+
   <input id="searchInput"
     placeholder="Search products..."
-    style="padding:12px;width:100%;font-size:16px;border:1px solid #ccc;border-radius:8px;" />
+    style="
+      padding:14px;
+      width:100%;
+      font-size:16px;
+      border:1px solid #ccc;
+      border-radius:12px;
+      outline:none;
+      background:white;
+    "
+  />
+
 </div>
 
-<div id="status">Loading products...</div>
+<div id="status" style="
+  text-align:center;
+  color:#777;
+  margin-bottom:15px;
+  font-size:14px;
+"></div>
+
 <div id="results"></div>
 
 <script>
 
 const BASE_ID = "apph6wlZKiRLkKk8k";
-
 const TABLE_NAME = "Table 1";
-
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
 let products = [];
 
 async function loadProducts() {
-  try {
-    console.log("Fetching Airtable...");
 
-    const res = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`
-        }
+  const res = await fetch(
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+    {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
       }
-    );
-
-    console.log("Status:", res.status);
-
-    const data = await res.json();
-    console.log("Airtable response:", data);
-
-    if (!data.records) {
-      document.getElementById("status").innerText =
-        "Error loading data. Check token/table name.";
-      return;
     }
+  );
 
-    products = data.records.map(r => ({
-      id: r.id,
-      name: r.fields["Product Name"] || "",
-      type: r.fields["Product Type"] || "",
-      rating: r.fields["Rating"] || "",
-      image: r.fields["Product Image"],
-      ingredients: r.fields["Ingredients"] || ""
-    }));
+  const data = await res.json();
 
-    document.getElementById("status").innerText =
-      `Loaded ${products.length} products`;
+  products = data.records.map(r => ({
+    id: r.id,
+    name: r.fields["Product Name"] || "",
+    brand: r.fields["Brand"] || "",
+    type: r.fields["Product Type"] || "",
+    rating: r.fields["Rating"] || "",
+    image: r.fields["Product Image"]
+  }));
 
-    render(products);
+  document.getElementById("status").innerText =
+    `Loaded ${products.length} products`;
 
-  } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText =
-      "Fetch error. Check console.";
-  }
+  render(products);
 }
 
 function render(list) {
+
   const box = document.getElementById("results");
   box.innerHTML = "";
 
-  if (list.length === 0) {
-    box.innerHTML = "<p>No products found.</p>";
-    return;
-  }
-
   list.forEach(p => {
+
     const div = document.createElement("div");
 
-    div.style.border = "1px solid #ddd";
-    div.style.padding = "12px";
-    div.style.marginBottom = "10px";
-    div.style.borderRadius = "8px";
+    div.style.maxWidth = "420px";
+    div.style.margin = "10px auto";
+    div.style.padding = "14px";
+    div.style.borderRadius = "14px";
+    div.style.background = "#fff";
+    div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)";
     div.style.cursor = "pointer";
+    div.style.transition = "0.2s";
+
+    div.onmouseover = () => {
+      div.style.transform = "translateY(-2px)";
+    };
+
+    div.onmouseout = () => {
+      div.style.transform = "translateY(0px)";
+    };
 
     div.innerHTML = `
-      <div><b>${p.name}</b></div>
-      <div style="font-size:12px;color:gray;">${p.type}</div>
-      <div style="font-size:12px;">Rating: ${p.rating}</div>
+      <div style="
+        font-weight:700;
+        font-size:18px;
+        margin-bottom:4px;
+        color:#111;
+      ">
+        ${p.name}
+      </div>
+
+      <div style="
+        font-size:14px;
+        color:#666;
+        margin-bottom:6px;
+      ">
+        ${p.type}
+      </div>
+
+      <div style="
+        font-size:13px;
+        color:#999;
+      ">
+        ⭐ ${p.rating || ""}
+      </div>
     `;
 
     div.onclick = () => {
-
-      window.location.href = `/product?id=${p.id}`;
+      window.location.href =
+        "product.html?id=" + p.id;
     };
 
     box.appendChild(div);
   });
 }
 
-document.getElementById("searchInput").addEventListener("input", (e) => {
+document.getElementById("searchInput")
+.addEventListener("input", (e) => {
+
   const value = e.target.value.toLowerCase();
 
   const filtered = products.filter(p =>
@@ -108,3 +143,5 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
 loadProducts();
 
 </script>
+
+</div>
