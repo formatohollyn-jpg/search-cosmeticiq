@@ -4,99 +4,98 @@
     style="padding:12px;width:100%;font-size:16px;border:1px solid #ccc;border-radius:8px;" />
 </div>
 
-  </svg>
-
-</button>
-  <input id="searchInput"
-    placeholder="Search products..."
-    style=" <img src="https://www.barcodelookup.com/assets/images/barcode-lookup-logo.webp" width="50" height="34" alt="Barcode Lookup logo">"
-  />
-
-  <div style="font-size:40px;">⌕</div>
-
-</div>
-
 <div id="status">Loading products...</div>
 <div id="results"></div>
 
 <script>
 
 const BASE_ID = "apph6wlZKiRLkKk8k";
+
 const TABLE_NAME = "Table 1";
+
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
-let products = [if (!res.ok) {
-  document.getElementById("status").innerText = "Failed to load products.";
-  return;
-};
+let products = [];
 
 async function loadProducts() {
+  try {
+    console.log("Fetching Airtable...");
 
-  const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
-    {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
+    const res = await fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
       }
+    );
+
+    console.log("Status:", res.status);
+
+    const data = await res.json();
+    console.log("Airtable response:", data);
+
+    if (!data.records) {
+      document.getElementById("status").innerText =
+        "Error loading data. Check token/table name.";
+      return;
     }
-  );
 
-  const data = await res.json();
+    products = data.records.map(r => ({
+      id: r.id,
+      name: r.fields["Product Name"] || "",
+      type: r.fields["Product Type"] || "",
+      rating: r.fields["Rating"] || "",
+      image: r.fields["Product Image"],
+      ingredients: r.fields["Ingredients"] || ""
+    }));
 
-  products = data.records.map(r => ({
-    id: r.id,
-    name: r.fields["Product Name"] || "",
-    brand: r.fields["Brand"] || "",
-    type: r.fields["Product Type"] || "",
-    rating: r.fields["Rating"] || "",
-    image: r.fields["Product Image"]
-  }));
+    document.getElementById("status").innerText =
+      `Loaded ${products.length} products`;
 
-  document.getElementById("status").innerText =
-    `Loaded ${products.length} products`;
+    render(products);
 
-  render(products);
+  } catch (err) {
+    console.error(err);
+    document.getElementById("status").innerText =
+      "Fetch error. Check console.";
+  }
 }
 
 function render(list) {
   const box = document.getElementById("results");
   box.innerHTML = "";
 
-  list.forEach(p => {
+  if (list.length === 0) {
+    box.innerHTML = "<p>No products found.</p>";
+    return;
+  }
 
+  list.forEach(p => {
     const div = document.createElement("div");
 
-    div.style.maxWidth = "420px";
-    div.style.margin = "10px auto";
+    div.style.border = "1px solid #ddd";
     div.style.padding = "12px";
-    div.style.border = "1px solid #eee";
-    div.style.borderRadius = "12px";
-    div.style.background = "#fff";
-    div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)";
+    div.style.marginBottom = "10px";
+    div.style.borderRadius = "8px";
     div.style.cursor = "pointer";
 
-    div.onmouseover = () => div.style.transform = "scale(1.01)";
-    div.onmouseout = () => div.style.transform = "scale(1)";
-    div.style.transition = "0.2s";
-
     div.innerHTML = `
-      <div style="font-weight:600;">${p.name}</div>
-      <div style="font-size:13px;color:#777;">${p.type}</div>
-      <div style="font-size:12px;color:#999;">⭐ ${p.rating}</div>
+      <div><b>${p.name}</b></div>
+      <div style="font-size:12px;color:gray;">${p.type}</div>
+      <div style="font-size:12px;">Rating: ${p.rating}</div>
     `;
 
     div.onclick = () => {
-      window.location.href = "product.html?id=" + p.id;
+
+      window.location.href = `/product?id=${p.id}`;
     };
 
     box.appendChild(div);
   });
 }
 
-
-document.getElementById("searchInput")
-.addEventListener("input", (e) => {
-
+document.getElementById("searchInput").addEventListener("input", (e) => {
   const value = e.target.value.toLowerCase();
 
   const filtered = products.filter(p =>
