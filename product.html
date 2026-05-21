@@ -136,21 +136,33 @@ async function loadProduct() {
         <div class="image-box">
           ${imgUrl ? `<img src="${imgUrl}">` : `<div style="height:300px;background:#eee;border-radius:16px;"></div>`}
         </div>
+  <div class="info">
+  <div class="name">${p.name}</div>
+  <div class="brand">${p.brand}</div>
 
-        <div class="info">
-          <div class="name">${p.name}</div>
-          <div class="brand">${p.brand}</div>
+  <div class="type">${p.type}</div>
 
-          <div class="type">${p.type}</div>
+  <div class="rating">⭐ ${p.rating}</div>
 
-          <div class="rating">⭐ ${p.rating}</div>
+  <p style="color:#666;line-height:1.5;">
+    More product details will go here once you add more fields in Airtable.
+  </p>
 
-          <p style="color:#666;line-height:1.5;">
-            More product details will go here once you add more fields in Airtable.
-          </p>
-        </div>
+  <button onclick="window.location.href='search.html'"
+    style="
+      margin-top: 20px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    ">
+    ← Back to Search
+  </button>
 
-      </div>
+</div>
     `;
 
   } catch (err) {
