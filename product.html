@@ -128,49 +128,49 @@ async function loadProduct() {
       image: r.fields["Product Image"]
     };
 
-    const imgUrl = p.image?.[0]?.url;
+  const imgUrl = p.image?.[0]?.url;
 
-   document.getElementById("content").innerHTML = `
-
-  <div class="container">
-
-        <div class="image-box">
-          ${imgUrl ? `<img src="${imgUrl}">` : `<div style="height:300px;background:#eee;border-radius:16px;"></div>`}
-        </div>
-  <div class="info">
-  <div class="name">${p.name}</div>
-  <div class="brand">${p.brand}</div>
-
-  <div class="type">${p.type}</div>
-
-  <div class="rating">⭐ ${p.rating}</div>
-
-  <p style="color:#666;line-height:1.5;">
-    More product details will go here once you add more fields in Airtable.
-  </p>
+document.getElementById("content").innerHTML = `
 
   <button onclick="window.location.href='index.html'"
     style="
-    .back-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 10px;
-  background: #f4f8f4;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  z-index: 1000;
-}
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      z-index: 1000;
     ">
     ← Back to Search
   </button>
 
-</div>
-    `;
+  <div class="container">
 
+    <div class="image-box">
+      ${imgUrl ? `<img src="${imgUrl}">` : `<div style="height:300px;background:#eee;border-radius:16px;"></div>`}
+    </div>
+
+    <div class="info">
+      <div class="name">${p.name}</div>
+      <div class="brand">${p.brand}</div>
+
+      <div class="type">${p.type}</div>
+
+      <div class="rating">⭐ ${p.rating}</div>
+
+      <p style="color:#666;line-height:1.5;">
+        More product details will go here once you add more fields in Airtable.
+      </p>
+    </div>
+
+  </div>
+`;
+    
   } catch (err) {
     document.getElementById("content").innerHTML =
       `<div class="error">Could not load product.</div>`;
