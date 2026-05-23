@@ -171,40 +171,43 @@ document.getElementById("searchInput")
 });
 
 loadProducts();
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+window.onload = function () {
 
-<script>
+  const btn = document.getElementById("scanBtn");
 
-document.getElementById("scanBtn").onclick = () => {
+  if (!btn) {
+    console.log("scanBtn not found");
+    return;
+  }
 
-  Quagga.init({
-    inputStream: {
-      type: "LiveStream",
-      target: document.querySelector('#scanner'),
-      constraints: {
-        facingMode: "environment"
+  btn.onclick = () => {
+
+    Quagga.init({
+      inputStream: {
+        type: "LiveStream",
+        target: document.querySelector('#scanner'),
+        constraints: {
+          facingMode: "environment"
+        }
+      },
+      decoder: {
+        readers: ["upc_reader", "ean_reader"]
       }
-    },
-    decoder: {
-      readers: ["upc_reader", "ean_reader"]
-    }
-  }, function(err) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    Quagga.start();
-  });
+    }, function(err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      Quagga.start();
+    });
 
-  Quagga.onDetected((data) => {
-    const code = data.codeResult.code;
+    Quagga.onDetected((data) => {
+      const code = data.codeResult.code;
+      alert("Barcode scanned: " + code);
+      Quagga.stop();
+    });
 
-    alert("Barcode scanned: " + code);
-
-    Quagga.stop();
-  });
-
-};
+  };
 
 </script>
 
