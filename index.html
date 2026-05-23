@@ -15,7 +15,7 @@
   BeautyIQ
 </h1>
   
-<div style="max-width:500px;margin:100 auto 40px;">
+<div style="max-width:500px;margin: auto 40px;">
 
   <input id="searchInput"
     placeholder="Search products..."
@@ -51,8 +51,8 @@ let products = [];
 
 async function loadProducts() {
 
-  const res = await fetch(
-    `https://api.airtable.com/v0/${apph6wlZKiRLkKk8k}/${TABLE 1}`,
+ const res = await fetch(
+  `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`
