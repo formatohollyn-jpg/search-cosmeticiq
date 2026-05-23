@@ -1,43 +1,43 @@
-<div style="
-  background:#fff8f5;
-  min-height:100vh;
-  padding-top:60px;
-  font-family:Arial,sans-serif;
-">
-  <div style="text-align:center; margin-top:20px;">
-  <img src="vines.PNG" style="
-    width:120px;
-    height:auto;
-  ">
+<div style=" 
+background:#fff8f5; 
+min-height:100vh; 
+padding-top:60px; 
+font-family:Arial,sans-serif; 
+"> 
+
+<div style=" 
+position: fixed; 
+top: 10px; 
+left: 10px; 
+font-size: 11px; 
+color:#846879; 
+font-family:Courier,Courier New; 
+"> 
+<img src="tiktoklogobiq.PNG" 
+style=" 
+width:16px; 
+height:16px; 
+object-fit:contain; 
+margin-top:8px; 
+"> 
+www.tiktok.com/@beauty_iq032 
 </div>
-  
+
+<h1 style=" 
+text-align:center; 
+Font-size:70px;
+margin-bottom:40px; 
+color:#846879; 
+font-family:Courier,Courier New; 
+"> 
+BeautyIQ 
+</h1> 
+
 <div style="
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  font-size: 11px;
-  color:#846879;
-  font-family:Courier,Courier New;
+  max-width:500px;
+  margin:50px auto 40px;
+  position:relative;
 ">
-  <img src="tiktoklogobiq.PNG" style="
-  width:16px;
-  height:16px;
-  object-fit:contain;
-  margin-top:8px;
-">
-  www.tiktok.com/@beauty_iq032
-</div>
-  
-  <h1 style="
-  text-align:center;
-  font-size:70px;
-  margin-bottom:40px;
-  color:#846879;
-  font-family:Courier,Courier New;
-">
-  BeautyIQ
-</h1>
-  
 
   <input id="searchInput"
     placeholder="Search products..."
@@ -52,38 +52,44 @@
       box-shadow:0 2px 8px rgba(0,0,0,0.03);
       box-sizing:border-box;
     "
-<div style=" 
-  display:flex; 
-  justify-content:center; 
-  align-items:center; 
-  gap:12px; margin-bottom:25px; 
-  ">
+  />
 
-  /> <div style="font-size:40px;"⌕"/div>
+  <div style="
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+    color:#888;
+    pointer-events:none;
+  ">
+    ⌕
+  </div>
 
 </div>
 
-<div id="status" style="
-  text-align:center;
-  color:#777;
-  margin-bottom:15px;
-  font-size:14px;
-"></div>
+<div id="status" 
+style=" 
+text-align:center; 
+color:#777; 
+margin-bottom:15px; 
+font-size:14px; ">
+</div> 
 
-<div id="results"></div>
+<div id="results"></div> 
 
-<script>
+<script> 
 
-const BASE_ID = "apph6wlZKiRLkKk8k";
-const TABLE_NAME = "Table 1";
-const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
+const BASE_ID = "apph6wlZKiRLkKk8k"; 
+const TABLE_NAME = "Table 1"; 
+const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0"; 
 
-let products = [];
+let products = []; 
 
-async function loadProducts() {
+async function loadProducts() { 
 
- const res = await fetch(
-  `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+  const res = await fetch(
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`
@@ -91,48 +97,48 @@ async function loadProducts() {
     }
   );
 
-  const data = await res.json();
+  const data = await res.json(); 
 
-  products = data.records.map(r => ({
-    id: r.id,
-    name: r.fields["Product Name"] || "",
-    brand: r.fields["Brand"] || "",
-    type: r.fields["Product Type"] || "",
-    rating: r.fields["Rating"] || "",
-    image: r.fields["Product Image"]
-  }));
+  products = data.records.map(r => ({ 
+    id: r.id, 
+    name: r.fields["Product Name"] || "", 
+    brand: r.fields["Brand"] || "", 
+    type: r.fields["Product Type"] || "", 
+    rating: r.fields["Rating"] || "", 
+    image: r.fields["Product Image"] 
+  })); 
 
-  document.getElementById("status").innerText =
-    `Loaded ${products.length} products`;
+  document.getElementById("status").innerText = 
+    `Loaded ${products.length} products`; 
 
-  render(products);
-}
+  render(products); 
+} 
 
-function render(list) {
+function render(list) { 
 
-  const box = document.getElementById("results");
-  box.innerHTML = "";
+  const box = document.getElementById("results"); 
+  box.innerHTML = ""; 
 
-  list.forEach(p => {
+  list.forEach(p => { 
 
-   const div = document.createElement("div");
+    const div = document.createElement("div"); 
 
-    div.style.maxWidth = "420px";
-    div.style.margin = "10px auto";
-    div.style.padding = "14px";
-    div.style.borderRadius = "14px";
-    div.style.background = "#fff";
-    div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)";
-    div.style.cursor = "pointer";
-    div.style.transition = "0.2s";
+    div.style.maxWidth = "420px"; 
+    div.style.margin = "10px auto"; 
+    div.style.padding = "14px"; 
+    div.style.borderRadius = "14px"; 
+    div.style.background = "#fff"; 
+    div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)"; 
+    div.style.cursor = "pointer"; 
+    div.style.transition = "0.2s"; 
 
-    div.onmouseover = () => {
-      div.style.transform = "translateY(-2px)";
-    };
+    div.onmouseover = () => { 
+      div.style.transform = "translateY(-2px)"; 
+    }; 
 
-    div.onmouseout = () => {
-      div.style.transform = "translateY(0px)";
-    };
+    div.onmouseout = () => { 
+      div.style.transform = "translateY(0px)"; 
+    }; 
 
     div.innerHTML = `
       <div style="
@@ -158,31 +164,30 @@ function render(list) {
       ">
         ⭐ ${p.rating || ""}
       </div>
-    `;
+    `; 
 
-    div.onclick = () => {
-      window.location.href =
-        "product.html?id=" + p.id;
-    };
+    div.onclick = () => { 
+      window.location.href = "product.html?id=" + p.id; 
+    }; 
 
-    box.appendChild(div);
-  });
-}
+    box.appendChild(div); 
+  }); 
+} 
 
 document.getElementById("searchInput")
-.addEventListener("input", (e) => {
+.addEventListener("input", (e) => { 
 
-  const value = e.target.value.toLowerCase();
+  const value = e.target.value.toLowerCase(); 
 
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(value)
-  );
+  const filtered = products.filter(p => 
+    p.name.toLowerCase().includes(value) 
+  ); 
 
-  render(filtered);
-});
+  render(filtered); 
+}); 
 
-loadProducts();
+loadProducts(); 
 
-</script>
+</script> 
 
 </div>
