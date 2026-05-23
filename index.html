@@ -31,12 +31,16 @@
   BeautyIQ
 </h1>
   
-<div style="max-width:500px;margin:50 auto 40px;">
+<div style="
+  max-width:500px;
+  margin:50px auto 40px;
+  position:relative;
+">
 
   <input id="searchInput"
     placeholder="Search products..."
     style="
-      padding:20px;
+      padding:20px 45px 20px 20px;
       width:100%;
       font-size:15px;
       border:1px solid #ccc;
@@ -44,11 +48,21 @@
       outline:none;
       background:white;
       box-shadow:0 2px 8px rgba(0,0,0,0.03);
+      box-sizing:border-box;
     "
   />
+  <div style="
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+    color:#888;
+    pointer-events:none;
+  ">
+    ⌕
+  </div>
 
-  <div style="font-size:40px;">⌕</div> 
-  
 </div>
 
 <div id="status" style="
