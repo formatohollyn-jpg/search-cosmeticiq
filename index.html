@@ -52,7 +52,7 @@ let products = [];
 async function loadProducts() {
 
   const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+    `https://api.airtable.com/v0/${apph6wlZKiRLkKk8k}/${TABLE 1}`,
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`
@@ -82,7 +82,7 @@ function render(list) {
   const box = document.getElementById("results");
   box.innerHTML = "";
 
-  list.forEach(p => {
+  list.slice(0, 10).forEach(p => {
 
     const div = document.createElement("div");
 
