@@ -14,26 +14,6 @@
 ">
   BeautyIQ
 </h1>
-
-  <button id="scanBtn" style="
-  padding:14px 20px;
-  border:none;
-  border-radius:14px;
-  background:#0f1015;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  display:block;
-  margin:20px auto;
-">
-  Scan Product Barcode
-</button>
-
-<div id="scanner" style="
-  width:100%;
-  max-width:500px;
-  margin:20px auto;
-"></div>
   
 <div style="max-width:500px;margin:100 auto 40px;">
 
@@ -171,43 +151,6 @@ document.getElementById("searchInput")
 });
 
 loadProducts();
-window.onload = function () {
-
-  const btn = document.getElementById("scanBtn");
-
-  if (!btn) {
-    console.log("scanBtn not found");
-    return;
-  }
-
-  btn.onclick = () => {
-
-    Quagga.init({
-      inputStream: {
-        type: "LiveStream",
-        target: document.querySelector('#scanner'),
-        constraints: {
-          facingMode: "environment"
-        }
-      },
-      decoder: {
-        readers: ["upc_reader", "ean_reader"]
-      }
-    }, function(err) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      Quagga.start();
-    });
-
-    Quagga.onDetected((data) => {
-      const code = data.codeResult.code;
-      alert("Barcode scanned: " + code);
-      Quagga.stop();
-    });
-
-  };
 
 </script>
 
