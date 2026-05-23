@@ -7,10 +7,11 @@
 
   <h1 style="
   text-align:center;
-  font-size:42px;
-  margin-bottom:20px;
+  font-size:100px;
+  margin-bottom:40px;
   color:#d8a7d8;
   font-family:Courier,Courier New;
+    -webkit-text-stroke: 2px #0f1015;
 ">
   BeautyIQ
 </h1>
@@ -82,7 +83,7 @@ function render(list) {
   const box = document.getElementById("results");
   box.innerHTML = "";
 
-  list.slice(0, 10).forEach(p => {
+  list.forEach(p => {
 
     const div = document.createElement("div");
 
