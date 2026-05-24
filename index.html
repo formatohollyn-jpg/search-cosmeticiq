@@ -473,54 +473,54 @@ loadProducts();
 const BASE_ID = "apph6wlZKiRLkKk8k";
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
-document.getElementById("subscribeBtn")
-.onclick = async function () {
+window.addEventListener("DOMContentLoaded", function () {
 
-  const email =
-    document.getElementById("emailInput").value;
+  document.getElementById("subscribeBtn").onclick = async function () {
 
-  if (!email) {
+    const email = document.getElementById("emailInput").value;
 
-    alert("Enter an email");
-
-    return;
-
-  }
-
-  const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
-    {
-
-      method: "POST",
-
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        fields: {
-          Email: email
-        }
-      })
-
+    if (!email) {
+      alert("Enter an email");
+      return;
     }
-  );
 
-  if (res.ok) {
+    try {
 
-    alert("Subscribed!");
+      const res = await fetch(
+        `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fields: {
+              Email: email
+            }
+          })
+        }
+      );
 
-    document.getElementById("emailInput").value = "";
+      if (res.ok) {
+        alert("Subscribed!");
+        document.getElementById("emailInput").value = "";
+      } else {
+        const text = await res.text();
+        console.log(text);
+        alert("Something went wrong: " + text);
+      }
 
-  } else {
+    } catch (err) {
+      console.log(err);
+      alert("Request failed");
+    }
 
-    alert("Something went wrong");
+  };
 
-  }
-
-};
+});
 
 </script>
+
 
 </div>
