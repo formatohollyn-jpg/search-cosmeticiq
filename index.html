@@ -11,6 +11,41 @@
       background:linear-gradient(to bottom,#f7e8ef,#fff8f5);
 
     }
+     /* Bubble background */
+.bubbles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -150px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(230,200,240,0.25));
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.6);
+  animation: floatUp linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.2);
+    opacity: 0;
+  }
+}
   </style>
 
 
@@ -18,49 +53,14 @@
 </head>
 
 <body>
-
-<!-- BUBBLES BACKGROUND -->
-
-<div style="
-position:fixed;
-top:80px;
-left:60px;
-width:90px;
-height:90px;
-border-radius:50%;
-background:rgba(255,255,255,0.35);
-border:1px solid rgba(255,255,255,0.6);
-box-shadow:0 8px 25px rgba(0,0,0,0.05);
-backdrop-filter:blur(4px);
-pointer-events:none;
-"></div>
-
-<div style="
-position:fixed;
-top:200px;
-right:80px;
-width:120px;
-height:120px;
-border-radius:50%;
-background:rgba(255,255,255,0.25);
-border:1px solid rgba(255,255,255,0.5);
-box-shadow:0 10px 30px rgba(0,0,0,0.06);
-pointer-events:none;
-"></div>
-
-<div style="
-position:fixed;
-bottom:120px;
-left:35%;
-width:70px;
-height:70px;
-border-radius:50%;
-background:rgba(255,255,255,0.4);
-border:1px solid rgba(255,255,255,0.6);
-box-shadow:0 6px 20px rgba(0,0,0,0.04);
-pointer-events:none;
-"></div>
-   
+   <div class="bubbles">
+  <div class="bubble" style="left:10%; width:60px; height:60px; animation-duration:12s;"></div>
+  <div class="bubble" style="left:25%; width:30px; height:30px; animation-duration:8s;"></div>
+  <div class="bubble" style="left:40%; width:80px; height:80px; animation-duration:15s;"></div>
+  <div class="bubble" style="left:60%; width:40px; height:40px; animation-duration:10s;"></div>
+  <div class="bubble" style="left:75%; width:55px; height:55px; animation-duration:13s;"></div>
+  <div class="bubble" style="left:90%; width:25px; height:25px; animation-duration:7s;"></div>
+</div>
 
 <div style="
 background:transparent;
