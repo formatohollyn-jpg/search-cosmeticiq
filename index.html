@@ -61,6 +61,37 @@ body {
   75%  { transform: translateX(10px); }
   100% { transform: translateX(0px); }
 }
+
+   .dropdown {
+  display:none;
+  position:absolute;
+  top:25px;
+  left:0;
+  background:rgba(255,248,245,0.95);
+  backdrop-filter:blur(12px);
+  padding:10px;
+  border-radius:12px;
+  min-width:140px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+  z-index:2000;
+}
+
+.dropdown div {
+  padding:8px;
+  cursor:pointer;
+  font-size:13px;
+  color:#846879;
+}
+
+.dropdown div:hover {
+  background:#f7e8ef;
+  border-radius:8px;
+}
+
+/* show dropdown on hover */
+div[style*="position:relative"]:hover .dropdown {
+  display:block;
+}
 </style>
 
 </head>
@@ -90,6 +121,58 @@ z-index:1000;
   ">
     BeautyIQ
   </div>
+  <div style="
+display:flex;
+gap:25px;
+font-family:Arial,sans-serif;
+font-size:14px;
+color:#fff8f5;
+align-items:center;
+">
+
+  <!-- BRANDS -->
+  <div style="position:relative; cursor:pointer;">
+    Brands ▾
+    <div class="dropdown">
+      <div onclick="filterCategory('all')">All Brands</div>
+      <div onclick="filterBrand('CeraVe')">CeraVe</div>
+      <div onclick="filterBrand('The Ordinary')">The Ordinary</div>
+      <div onclick="filterBrand('Byoma')">Byoma</div>
+    </div>
+  </div>
+
+  <!-- SKINCARE -->
+  <div style="position:relative; cursor:pointer;">
+    Skincare ▾
+    <div class="dropdown">
+      <div onclick="filterType('Skincare')">All Skincare</div>
+      <div onclick="filterKeyword('cleanser')">Cleansers</div>
+      <div onclick="filterKeyword('serum')">Serums</div>
+      <div onclick="filterKeyword('moisturizer')">Moisturizers</div>
+    </div>
+  </div>
+
+  <!-- HAIRCARE -->
+  <div style="position:relative; cursor:pointer;">
+    Haircare ▾
+    <div class="dropdown">
+      <div onclick="filterType('Haircare')">All Haircare</div>
+      <div onclick="filterKeyword('shampoo')">Shampoo</div>
+      <div onclick="filterKeyword('conditioner')">Conditioner</div>
+    </div>
+  </div>
+
+  <!-- MAKEUP -->
+  <div style="position:relative; cursor:pointer;">
+    Makeup ▾
+    <div class="dropdown">
+      <div onclick="filterType('Makeup')">All Makeup</div>
+      <div onclick="filterKeyword('foundation')">Foundation</div>
+      <div onclick="filterKeyword('lip')">Lip Products</div>
+    </div>
+  </div>
+
+</div>
 
 </div>
  
@@ -435,6 +518,22 @@ document.getElementById("loadMoreBtn")
   render(products);
 
 };
+  function filterType(type) {
+  const filtered = products.filter(p => p.type === type);
+  render(filtered);
+}
+
+function filterBrand(brand) {
+  const filtered = products.filter(p => p.brand === brand);
+  render(filtered);
+}
+
+function filterKeyword(word) {
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(word.toLowerCase())
+  );
+  render(filtered);
+}
 
 /* ---------------- SEARCH ---------------- */
 
