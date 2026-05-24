@@ -208,7 +208,7 @@ function render(list) {
 document.getElementById("loadMoreBtn")
 .onclick = function () {
 
-  visibleCount += 10;
+  visibleCount += 5;
 
   render(products);
 
@@ -331,5 +331,93 @@ document.getElementById("scanBtn").onclick = function () {
 loadProducts();
 
 </script>
+  <div style="
+  background:#846879;
+  margin-top:80px;
+  padding:50px 20px;
+  color:white;
+">
+
+  <div style="
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:40px;
+  ">
+
+    <!-- LEFT -->
+    <div>
+      <div style="
+        font-size:24px;
+        font-family:Courier New;
+        margin-bottom:15px;
+      ">
+        BeautyIQ
+      </div>
+
+      <div style="font-size:14px; line-height:1.8;">
+        Scan products<br>
+        Search ingredients<br>
+        Learn skincare
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div>
+      <div style="
+        font-size:18px;
+        margin-bottom:15px;
+      ">
+        Socials
+      </div>
+
+      <div style="font-size:14px; line-height:2;">
+        TikTok<br>
+        Instagram<br>
+        Contact
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div style="
+        font-size:18px;
+        margin-bottom:15px;
+      ">
+        Join Updates
+      </div>
+
+      <input
+        placeholder="Email address"
+        style="
+          padding:12px;
+          width:220px;
+          border:none;
+          border-radius:10px;
+          outline:none;
+          margin-bottom:10px;
+        "
+      >
+
+      <br>
+
+      <button style="
+        padding:10px 18px;
+        border:none;
+        border-radius:10px;
+        background:white;
+        color:#846879;
+        cursor:pointer;
+        font-weight:bold;
+      ">
+        Subscribe
+      </button>
+    </div>
+
+  </div>
+
+</div>
 
 </div>
