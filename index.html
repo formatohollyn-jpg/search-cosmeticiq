@@ -21,16 +21,25 @@
       animation-delay: 6s;
     }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0);
-        opacity: 0.85;
-      }
-      100% {
-        transform: translateY(-120vh);
-        opacity: 0;
-      }
-    }
+  @keyframes floatUp {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: translateY(-60vh) translateX(20px);
+  }
+
+  100% {
+    transform: translateY(-120vh) translateX(-15px);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 
