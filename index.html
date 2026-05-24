@@ -3,27 +3,32 @@
 <head>
   <title>BeautyIQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<style> 
 
-  body{ 
-    margin:0; 
-    font-family:Arial,sans-serif; 
-    background:linear-gradient(to bottom,#f7e8ef,#fff8f5);
-  }
-   
-  .bubble-img {
-  position: absolute;
-  bottom: -120px;
-  animation: floatUp 12s linear infinite;
+ <style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom,#f7e8ef,#fff8f5);
 }
 
-    .cycleB {
-      animation-delay: 6s;
-    }
+.bubble-img {
+  position: absolute;
+  bottom: -120px;
+  animation: floatUp 14s linear infinite;
+}
 
+.cycleA {
+  animation-delay: 0s;
+}
+
+.cycleB {
+  animation-delay: 7s; /* half of 14s */
+}
+   
+/* ONE CLEAN MOTION SYSTEM */
 @keyframes floatUp {
   0% {
-    transform: translateY(0) translateX(0) scale(1);
+    transform: translateY(0px) translateX(0px) scale(1);
     opacity: 0;
   }
 
@@ -36,7 +41,7 @@
   }
 
   50% {
-    transform: translateY(-60vh) translateX(-20px) scale(0.98);
+    transform: translateY(-60vh) translateX(-12px) scale(0.98);
   }
 
   75% {
@@ -44,11 +49,12 @@
   }
 
   100% {
-    transform: translateY(-120vh) translateX(-15px) scale(1);
+    transform: translateY(-120vh) translateX(-15px) scale(1.05);
     opacity: 0;
   }
 }
 </style>
+
 </head>
 
 <body>
