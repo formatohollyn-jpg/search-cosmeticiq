@@ -39,32 +39,63 @@ BeautyIQ
   position:relative;
 ">
 
-  <input id="searchInput"
-    placeholder="Search products..."
-    style="
-      padding:20px 45px 20px 20px;
-      width:100%;
-      font-size:15px;
-      border:1px solid #ccc;
-      border-radius:12px;
-      outline:none;
-      background:white;
-      box-shadow:0 2px 8px rgba(0,0,0,0.03);
-      box-sizing:border-box;
-    "
-  />
+<div style="
+  max-width:500px;
+  margin:50px auto 40px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+">
 
-  <div style="
-    position:absolute;
-    right:15px;
-    top:50%;
-    transform:translateY(-50%);
-    font-size:18px;
-    color:#888;
-    pointer-events:none;
-  ">
-    ⌕
+  <div style="position:relative; flex:1;">
+    <input id="searchInput"
+      placeholder="Search products..."
+      style="
+        padding:20px 45px 20px 20px;
+        width:100%;
+        font-size:15px;
+        border:1px solid #ccc;
+        border-radius:12px;
+        outline:none;
+        background:white;
+        box-shadow:0 2px 8px rgba(0,0,0,0.03);
+        box-sizing:border-box;
+      "
+    />
+
+    <div style="
+      position:absolute;
+      right:15px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:18px;
+      color:#888;
+      pointer-events:none;
+    ">
+      ⌕
+    </div>
   </div>
+
+  <button id="scanBtn" style="
+    padding:18px 16px;
+    border:none;
+    border-radius:12px;
+    background:#846879;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+    white-space:nowrap;
+  ">
+    Scan
+  </button>
+
+</div>
+
+<div id="scanner" style="
+  width:300px;
+  margin:10px auto;
+  display:none;
+"></div>
 
 </div>
 
