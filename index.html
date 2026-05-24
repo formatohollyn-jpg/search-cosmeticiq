@@ -505,19 +505,23 @@ document.getElementById("loadMoreBtn")
   render(products);
 
 };
-  function filterType(type) {
-  const filtered = products.filter(p => p.type === type);
+ function filterType(type) {
+  const filtered = products.filter(p =>
+    (p.type || "").toLowerCase().includes(type.toLowerCase())
+  );
   render(filtered);
 }
 
 function filterBrand(brand) {
-  const filtered = products.filter(p => p.brand === brand);
+  const filtered = products.filter(p =>
+    (p.brand || "").toLowerCase().includes(brand.toLowerCase())
+  );
   render(filtered);
 }
 
 function filterKeyword(word) {
   const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(word.toLowerCase())
+    (p.name || "").toLowerCase().includes(word.toLowerCase())
   );
   render(filtered);
 }
