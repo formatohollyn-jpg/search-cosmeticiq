@@ -14,14 +14,14 @@
   .bubble-img {
   position: absolute;
   bottom: -120px;
-  animation: floatUp 12s ease-in-out infinite;
+  animation: floatUp 12s linear infinite;
 }
 
     .cycleB {
       animation-delay: 6s;
     }
 
-  @keyframes floatUp {
+ @keyframes floatUp {
   0% {
     transform: translateY(0) translateX(0);
     opacity: 0;
@@ -31,12 +31,8 @@
     opacity: 0.85;
   }
 
-  50% {
-    transform: translateY(-60vh) translateX(20px);
-  }
-
   100% {
-    transform: translateY(-120vh) translateX(-15px);
+    transform: translateY(-120vh) translateX(20px);
     opacity: 0;
   }
 }
@@ -49,7 +45,7 @@
 
   <!-- CYCLE A -->
   <img src="bubble1.PNG" class="bubble-img cycleA" style="left:10%; width:80px; animation-delay:0s;">
-  <img src="bubble2.PNG" class="bubble-img cycleA" style="left:30%; width:50px; animation-delay:2s;">
+  <img src="bubble2.PNG" class="bubble-img cycleA" style="left:20%; width:50px; animation-delay:2s;">
   <img src="bubble3.PNG" class="bubble-img cycleA" style="left:60%; width:100px; animation-delay:4s;">
   <img src="bubble1.PNG" class="bubble-img cycleA" style="left:70%; width:60px; animation-delay:6s;">
 
