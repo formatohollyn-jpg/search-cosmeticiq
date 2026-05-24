@@ -327,7 +327,49 @@ document.getElementById("scanBtn").onclick = function () {
   });
 
 };
+document.getElementById("subscribeBtn")
+.onclick = async function () {
 
+  const email =
+    document.getElementById("emailInput").value;
+
+  if (!email) {
+    alert("Enter an email");
+    return;
+  }
+
+  const res = await fetch(
+    `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
+    {
+      method: "POST",
+
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        fields: {
+          Email: email
+        }
+      })
+    }
+  );
+
+  if (res.ok) {
+
+    alert("Subscribed!");
+
+    document.getElementById("emailInput").value = "";
+
+  } else {
+
+    alert("Something went wrong");
+
+  }
+
+};
+  
 loadProducts();
 
 </script>
