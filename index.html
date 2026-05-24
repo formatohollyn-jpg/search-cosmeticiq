@@ -475,9 +475,17 @@ const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3
 
 window.addEventListener("DOMContentLoaded", function () {
 
-  document.getElementById("subscribeBtn").onclick = async function () {
+  const btn = document.getElementById("subscribeBtn");
+  const input = document.getElementById("emailInput");
 
-    const email = document.getElementById("emailInput").value;
+  if (!btn || !input) {
+    console.log("Button or input not found");
+    return;
+  }
+
+  btn.addEventListener("click", async function () {
+
+    const email = input.value;
 
     if (!email) {
       alert("Enter an email");
@@ -485,30 +493,40 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     try {
+      const res = await fetch(
+        `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fields: {
+              Email: email
+            }
+          })
+        }
+      );
 
-    const res = await fetch(
-  `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
-  {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      fields: {
-        Email: email
+      if (res.ok) {
+        alert("Subscribed!");
+        input.value = "";
+      } else {
+        const text = await res.text();
+        console.log(text);
+        alert("Error: " + text);
       }
-    })
-  }
-);
 
-const text = await res.text();
+    } catch (err) {
+      console.log(err);
+      alert("Request failed");
+    }
 
-console.log("STATUS:", res.status);
-console.log("RESPONSE:", text);
+  });
 
-alert(res.status + " " + text);
-
+});
+   
 </script>
 
 
