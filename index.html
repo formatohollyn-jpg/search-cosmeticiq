@@ -486,39 +486,28 @@ window.addEventListener("DOMContentLoaded", function () {
 
     try {
 
-      const res = await fetch(
-        `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            fields: {
-              Email: email
-            }
-          })
-        }
-      );
-
-      if (res.ok) {
-        alert("Subscribed!");
-        document.getElementById("emailInput").value = "";
-      } else {
-        const text = await res.text();
-        console.log(text);
-        alert("Something went wrong: " + text);
+    const res = await fetch(
+  `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      fields: {
+        Email: email
       }
+    })
+  }
+);
 
-    } catch (err) {
-      console.log(err);
-      alert("Request failed");
-    }
+const text = await res.text();
 
-  };
+console.log("STATUS:", res.status);
+console.log("RESPONSE:", text);
 
-});
+alert(res.status + " " + text);
 
 </script>
 
