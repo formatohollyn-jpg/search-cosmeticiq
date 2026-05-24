@@ -194,7 +194,6 @@ document.getElementById("searchInput")
   render(filtered); 
 }); 
 
-/* ---------------- CLEAN BARCODE ---------------- */
 function cleanBarcode(value) {
   return String(value)
     .replace(/,/g, "")
@@ -211,8 +210,13 @@ function findProductByBarcode(code) {
   );
 }
 
-/* ---------------- SCANNER ---------------- */
+let scanning = false;
+
 document.getElementById("scanBtn").onclick = function () {
+
+  if (scanning) return;
+
+  scanning = true;
 
   const scanner = document.getElementById("scanner");
   scanner.style.display = "block";
@@ -225,40 +229,56 @@ document.getElementById("scanBtn").onclick = function () {
         facingMode: "environment"
       }
     },
+
     decoder: {
-      readers: ["ean_reader", "upc_reader"]
+      readers: [
+        "ean_reader",
+        "upc_reader",
+        "upc_e_reader"
+      ]
     }
+
   }, function (err) {
+
     if (err) {
       console.log(err);
+      scanning = false;
       return;
     }
+
     Quagga.start();
   });
+
+  Quagga.onDetected(function (data) {
+
+    const code = data.codeResult.code;
+
+    console.log("SCANNED:", code);
+
+    const product = findProductByBarcode(code);
+
+    if (product) {
+
+      alert("FOUND: " + product.name);
+
+      Quagga.stop();
+
+      scanner.style.display = "none";
+
+      scanning = false;
+
+      window.location.href =
+        "product.html?id=" + product.id;
+
+    } else {
+
+      console.log("NO MATCH");
+
+    }
+
+  });
+
 };
-
-/* ---------------- DEBUG SCAN RESULT ---------------- */
-Quagga.onDetected(function (data) {
-
-  const code = data.codeResult.code;
-
-  console.log("🔎 SCANNED CODE:", code);
-  console.log("📦 AIRTABLE CODES:", products.map(p => p.barcode));
-
-  const product = findProductByBarcode(code);
-
-  if (product) {
-    console.log("✅ MATCH FOUND:", product.name);
-    window.location.href = "product.html?id=" + product.id;
-  } else {
-    console.log("❌ NO MATCH FOR:", code);
-    alert("No product found for barcode: " + code);
-  }
-
-  Quagga.stop();
-});
-
-/* ---------------- START ---------------- */
 loadProducts();
 
 </script>
