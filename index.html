@@ -203,12 +203,20 @@ function cleanBarcode(value) {
 }
 
 function findProductByBarcode(code) {
+
   const cleanedCode = cleanBarcode(code);
 
-  return products.find(p =>
-    cleanBarcode(p.barcode) === cleanedCode
-  );
-}
+  return products.find(p => {
+
+    const barcodeList = String(p.barcode)
+      .split(",");
+
+    return barcodeList.some(b =>
+      cleanBarcode(b) === cleanedCode
+    );
+
+  });
+  }
 
 let scanning = false;
 
