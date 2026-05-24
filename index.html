@@ -78,7 +78,6 @@ BeautyIQ
     color:white;
     font-size:14px;
     cursor:pointer;
-    white-space:nowrap;
   ">
     Scan
   </button>
@@ -91,13 +90,12 @@ BeautyIQ
   display:none;
 "></div>
 
-<div id="status" 
-style=" 
-text-align:center; 
-color:#777; 
-margin-bottom:15px; 
-font-size:14px; ">
-</div> 
+<div id="status" style="
+  text-align:center;
+  color:#777;
+  margin-bottom:15px;
+  font-size:14px;
+"></div> 
 
 <div id="results"></div> 
 
@@ -111,7 +109,7 @@ const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3
 
 let products = [];
 
-/* ✅ LOAD DATA */
+/* ---------------- LOAD PRODUCTS ---------------- */
 async function loadProducts() { 
 
   const res = await fetch(
@@ -141,7 +139,7 @@ async function loadProducts() {
   render(products); 
 } 
 
-/* ✅ RENDER */
+/* ---------------- RENDER ---------------- */
 function render(list) { 
 
   const box = document.getElementById("results"); 
@@ -167,11 +165,9 @@ function render(list) {
       <div style="font-weight:700;font-size:18px;margin-bottom:4px;color:#111;">
         ${p.name}
       </div>
-
       <div style="font-size:14px;color:#666;margin-bottom:6px;">
         ${p.type}
       </div>
-
       <div style="font-size:13px;color:#999;">
         ⭐ ${p.rating || ""}
       </div>
@@ -185,7 +181,7 @@ function render(list) {
   }); 
 } 
 
-/* ✅ SEARCH */
+/* ---------------- SEARCH ---------------- */
 document.getElementById("searchInput")
 .addEventListener("input", (e) => { 
 
@@ -198,12 +194,24 @@ document.getElementById("searchInput")
   render(filtered); 
 }); 
 
-/* ✅ BARCODE LOOKUP */
-function findProductByBarcode(code) {
-  return products.find(p => String(p.barcode) === String(code));
+/* ---------------- CLEAN BARCODE ---------------- */
+function cleanBarcode(value) {
+  return String(value)
+    .replace(/,/g, "")
+    .replace(".0", "")
+    .trim()
+    .replace(/^0+/, "");
 }
 
-/* ✅ SCAN BUTTON */
+function findProductByBarcode(code) {
+  const cleanedCode = cleanBarcode(code);
+
+  return products.find(p =>
+    cleanBarcode(p.barcode) === cleanedCode
+  );
+}
+
+/* ---------------- SCANNER ---------------- */
 document.getElementById("scanBtn").onclick = function () {
 
   const scanner = document.getElementById("scanner");
@@ -227,27 +235,31 @@ document.getElementById("scanBtn").onclick = function () {
     }
     Quagga.start();
   });
-
 };
 
-/* ✅ DETECTION (IMPORTANT: OUTSIDE BUTTON) */
+/* ---------------- DEBUG SCAN RESULT ---------------- */
 Quagga.onDetected(function (data) {
 
   const code = data.codeResult.code;
 
+  console.log("🔎 SCANNED CODE:", code);
+  console.log("📦 AIRTABLE CODES:", products.map(p => p.barcode));
+
   const product = findProductByBarcode(code);
 
   if (product) {
+    console.log("✅ MATCH FOUND:", product.name);
     window.location.href = "product.html?id=" + product.id;
   } else {
+    console.log("❌ NO MATCH FOR:", code);
     alert("No product found for barcode: " + code);
   }
 
   Quagga.stop();
 });
 
-/* ✅ START */
+/* ---------------- START ---------------- */
 loadProducts();
 
-</script> 
+</script>
 </div>
