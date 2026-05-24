@@ -1,166 +1,219 @@
-<div style=" 
-background:#fff8f5; 
-min-height:100vh; 
-padding-top:60px; 
-font-family:Arial,sans-serif; 
-"> 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BeautyIQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<div style=" 
-position: fixed; 
-top: 10px; 
-left: 10px; 
-font-size: 11px; 
-color:#846879; 
-font-family:Courier,Courier New; 
-"> 
+  <style>
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff8f5;
+    }
+  </style>
+</head>
 
-<img src="tiktoklogobiq.PNG" 
-style=" 
-width:20px; 
-height:20px; 
-object-fit:contain; 
-margin-top:8px; 
-"> 
-
-www.tiktok.com/@beauty_iq032 
-
-</div>
-
-<h1 style=" 
-text-align:center; 
-font-size:70px;
-margin-bottom:40px; 
-color:#846879; 
-font-family:Courier,Courier New; 
-"> 
-BeautyIQ 
-</h1> 
+<body>
 
 <div style="
-  max-width:500px;
-  margin:50px auto 40px;
-  display:flex;
-  gap:10px;
-  align-items:center;
+background:#fff8f5;
+min-height:100vh;
+padding-top:60px;
+font-family:Arial,sans-serif;
 ">
 
-  <div style="position:relative; flex:1;">
+<!-- TOP LEFT -->
 
-    <input id="searchInput"
-      placeholder="Search products..."
-      style="
-        padding:20px 45px 20px 20px;
-        width:100%;
-        font-size:15px;
-        border:1px solid #ccc;
-        border-radius:12px;
-        outline:none;
-        background:white;
-        box-shadow:0 2px 8px rgba(0,0,0,0.03);
-        box-sizing:border-box;
-      "
-    />
+<div style="
+position: fixed;
+top: 10px;
+left: 10px;
+font-size: 11px;
+color:#846879;
+font-family:Courier,Courier New;
+">
 
-    <div style="
-      position:absolute;
-      right:15px;
-      top:50%;
-      transform:translateY(-50%);
-      font-size:18px;
-      color:#888;
-      pointer-events:none;
-    ">
-      ⌕
-    </div>
+<img src="tiktoklogobiq.PNG"
+style="
+width:20px;
+height:20px;
+object-fit:contain;
+margin-top:8px;
+">
 
-  </div>
-
-  <button id="scanBtn" style="
-    padding:18px 16px;
-    border:none;
-    border-radius:12px;
-    background:#846879;
-    color:white;
-    font-size:14px;
-    cursor:pointer;
-  ">
-    Scan
-  </button>
+www.tiktok.com/@beauty_iq032
 
 </div>
 
+<!-- TITLE -->
+
+<h1 style="
+text-align:center;
+font-size:70px;
+margin-bottom:40px;
+color:#846879;
+font-family:Courier,Courier New;
+">
+BeautyIQ
+</h1>
+
+<!-- SEARCH -->
+
+<div style="
+max-width:500px;
+margin:50px auto 40px;
+display:flex;
+gap:10px;
+align-items:center;
+">
+
+<div style="position:relative; flex:1;">
+
+<input
+id="searchInput"
+placeholder="Search products..."
+style="
+padding:20px 45px 20px 20px;
+width:100%;
+font-size:15px;
+border:1px solid #ccc;
+border-radius:12px;
+outline:none;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.03);
+box-sizing:border-box;
+"
+/>
+
+<div style="
+position:absolute;
+right:15px;
+top:50%;
+transform:translateY(-50%);
+font-size:18px;
+color:#888;
+pointer-events:none;
+">
+⌕
+</div>
+
+</div>
+
+<button
+id="scanBtn"
+style="
+padding:18px 16px;
+border:none;
+border-radius:12px;
+background:#846879;
+color:white;
+font-size:14px;
+cursor:pointer;
+">
+Scan
+</button>
+
+</div>
+
+<!-- SCANNER -->
+
 <div id="scanner" style="
-  width:300px;
-  margin:10px auto;
-  display:none;
+width:300px;
+margin:10px auto;
+display:none;
 "></div>
 
 <div id="status" style="
-  text-align:center;
-  color:#777;
-  margin-bottom:15px;
-  margin-top:-20px;
-  font-size:8px;
-"></div> 
+text-align:center;
+color:#777;
+margin-bottom:15px;
+margin-top:-20px;
+font-size:12px;
+"></div>
+
+<!-- RESULTS -->
 
 <div id="results"></div>
 
+<!-- LOAD MORE -->
+
 <div style="text-align:center; margin:30px 0;">
 
-  <button id="loadMoreBtn" style="
-    padding:12px 18px;
-    border:none;
-    border-radius:999px;
-    background:#846879;
-    color:white;
-    font-size:18px;
-    cursor:pointer;
-  ">
-    ↓
-  </button>
+<button
+id="loadMoreBtn"
+style="
+padding:12px 18px;
+border:none;
+border-radius:999px;
+background:#846879;
+color:white;
+font-size:18px;
+cursor:pointer;
+">
+↓
+</button>
 
 </div>
+
+<!-- QUAGGA -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
 <script>
 
+/* ---------------- AIRTABLE ---------------- */
+
 const BASE_ID = "apph6wlZKiRLkKk8k";
 const TABLE_NAME = "Table 1";
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
+/* ---------------- PRODUCTS ---------------- */
+
 let products = [];
-let visibleCount = 10;
+let visibleCount = 5;
 
 /* ---------------- LOAD PRODUCTS ---------------- */
 
 async function loadProducts() {
 
-  const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
-    {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
+  try {
+
+    const res = await fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
       }
-    }
-  );
+    );
 
-  const data = await res.json();
+    const data = await res.json();
 
-  products = data.records.map(r => ({
-    id: r.id,
-    name: r.fields["Product Name"] || "",
-    brand: r.fields["Brand"] || "",
-    type: r.fields["Product Type"] || "",
-    rating: r.fields["Rating"] || "",
-    image: r.fields["Product Image"],
-    barcode: r.fields["Barcode"] || ""
-  }));
+    console.log(data);
 
-  document.getElementById("status").innerText =
-    `Loaded ${products.length} products`;
+    products = data.records.map(r => ({
+      id: r.id,
+      name: r.fields["Product Name"] || "",
+      brand: r.fields["Brand"] || "",
+      type: r.fields["Product Type"] || "",
+      rating: r.fields["Rating"] || "",
+      image: r.fields["Product Image"],
+      barcode: r.fields["Barcode"] || ""
+    }));
 
-  render(products);
+    document.getElementById("status").innerText =
+      `Loaded ${products.length} products`;
+
+    render(products);
+
+  } catch(err) {
+
+    console.log(err);
+
+    document.getElementById("status").innerText =
+      "Failed to load products";
+
+  }
 
 }
 
@@ -357,6 +410,8 @@ document.getElementById("scanBtn")
 
 };
 
+/* ---------------- LOAD PRODUCTS ---------------- */
+
 loadProducts();
 
 </script>
@@ -364,128 +419,124 @@ loadProducts();
 <!-- FOOTER -->
 
 <div style="
-  background:#846879;
-  margin-top:80px;
-  padding:50px 20px;
-  color:white;
+background:#846879;
+margin-top:80px;
+padding:50px 20px;
+color:white;
 ">
 
-  <div style="
-    max-width:1100px;
-    margin:0 auto;
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:40px;
-  ">
+<div style="
+max-width:1100px;
+margin:0 auto;
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:40px;
+">
 
-    <!-- LEFT -->
+<!-- LEFT -->
 
-    <div>
+<div>
 
-      <div style="
-        font-size:24px;
-        font-family:Courier New;
-        margin-bottom:15px;
-      ">
-        BeautyIQ
-      </div>
+<div style="
+font-size:24px;
+font-family:Courier New;
+margin-bottom:15px;
+">
+BeautyIQ
+</div>
 
-      <div style="
-        font-size:14px;
-        line-height:1.8;
-      ">
-        Scan products<br>
-        Search ingredients<br>
-        Learn skincare
-      </div>
-
-    </div>
-
-    <!-- CENTER -->
-
-    <div>
-
-      <div style="
-        font-size:18px;
-        margin-bottom:15px;
-      ">
-        Socials
-      </div>
-
-      <div style="
-        font-size:14px;
-        line-height:2;
-      ">
-        TikTok<br>
-        Instagram<br>
-        Contact
-      </div>
-
-    </div>
-
-    <!-- RIGHT -->
-
-    <div>
-
-      <div style="
-        font-size:18px;
-        margin-bottom:15px;
-      ">
-        Join Updates
-      </div>
-
-      <input
-        id="emailInput"
-        placeholder="Email address"
-        style="
-          padding:12px;
-          width:220px;
-          border:none;
-          border-radius:10px;
-          outline:none;
-          margin-bottom:10px;
-        "
-      >
-
-      <br>
-
-      <button id="subscribeBtn" style="
-        padding:10px 18px;
-        border:none;
-        border-radius:10px;
-        background:white;
-        color:#846879;
-        cursor:pointer;
-        font-weight:bold;
-      ">
-        Subscribe
-      </button>
-
-    </div>
-
-  </div>
+<div style="
+font-size:14px;
+line-height:1.8;
+">
+Scan products<br>
+Search ingredients<br>
+Learn skincare
+</div>
 
 </div>
 
-<script>
+<!-- CENTER -->
 
-const BASE_ID = "apph6wlZKiRLkKk8k";
-const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
+<div>
+
+<div style="
+font-size:18px;
+margin-bottom:15px;
+">
+Socials
+</div>
+
+<div style="
+font-size:14px;
+line-height:2;
+">
+TikTok<br>
+Instagram<br>
+Contact
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div>
+
+<div style="
+font-size:18px;
+margin-bottom:15px;
+">
+Join Updates
+</div>
+
+<input
+id="emailInput"
+placeholder="Email address"
+style="
+padding:12px;
+width:220px;
+border:none;
+border-radius:10px;
+outline:none;
+margin-bottom:10px;
+"
+>
+
+<br>
+
+<button
+id="subscribeBtn"
+style="
+padding:10px 18px;
+border:none;
+border-radius:10px;
+background:white;
+color:#846879;
+cursor:pointer;
+font-weight:bold;
+">
+Subscribe
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SUBSCRIBE SCRIPT -->
+
+<script>
 
 window.addEventListener("DOMContentLoaded", function () {
 
   const btn = document.getElementById("subscribeBtn");
   const input = document.getElementById("emailInput");
 
-  if (!btn || !input) {
-    console.log("Button or input not found");
-    return;
-  }
-
   btn.addEventListener("click", async function () {
 
-    const email = input.value;
+    const email = input.value.trim();
 
     if (!email) {
       alert("Enter an email");
@@ -493,6 +544,7 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     try {
+
       const res = await fetch(
         `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
         {
@@ -509,25 +561,35 @@ window.addEventListener("DOMContentLoaded", function () {
         }
       );
 
+      const data = await res.json();
+
+      console.log(data);
+
       if (res.ok) {
+
         alert("Subscribed!");
+
         input.value = "";
+
       } else {
-        const text = await res.text();
-        console.log(text);
-        alert("Error: " + text);
+
+        alert("Error saving email");
+
       }
 
-    } catch (err) {
+    } catch(err) {
+
       console.log(err);
+
       alert("Request failed");
+
     }
 
   });
 
 });
-   
+
 </script>
 
-
-</div>
+</body>
+</html>     
