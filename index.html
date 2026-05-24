@@ -13,6 +13,7 @@ font-size: 11px;
 color:#846879; 
 font-family:Courier,Courier New; 
 "> 
+
 <img src="tiktoklogobiq.PNG" 
 style=" 
 width:20px; 
@@ -20,7 +21,9 @@ height:20px;
 object-fit:contain; 
 margin-top:8px; 
 "> 
+
 www.tiktok.com/@beauty_iq032 
+
 </div>
 
 <h1 style=" 
@@ -42,6 +45,7 @@ BeautyIQ
 ">
 
   <div style="position:relative; flex:1;">
+
     <input id="searchInput"
       placeholder="Search products..."
       style="
@@ -68,6 +72,7 @@ BeautyIQ
     ">
       ⌕
     </div>
+
   </div>
 
   <button id="scanBtn" style="
@@ -101,6 +106,7 @@ BeautyIQ
 <div id="results"></div>
 
 <div style="text-align:center; margin:30px 0;">
+
   <button id="loadMoreBtn" style="
     padding:12px 18px;
     border:none;
@@ -112,21 +118,23 @@ BeautyIQ
   ">
     ↓
   </button>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
 <script>
 
-const BASE_ID = "apph6wlZKiRLkKk8k"; 
-const TABLE_NAME = "Table 1"; 
-const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0"; 
+const BASE_ID = "apph6wlZKiRLkKk8k";
+const TABLE_NAME = "Table 1";
+const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
 let products = [];
 let visibleCount = 10;
 
 /* ---------------- LOAD PRODUCTS ---------------- */
-async function loadProducts() { 
+
+async function loadProducts() {
 
   const res = await fetch(
     `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
@@ -137,41 +145,45 @@ async function loadProducts() {
     }
   );
 
-  const data = await res.json(); 
+  const data = await res.json();
 
-  products = data.records.map(r => ({ 
-    id: r.id, 
-    name: r.fields["Product Name"] || "", 
-    brand: r.fields["Brand"] || "", 
-    type: r.fields["Product Type"] || "", 
-    rating: r.fields["Rating"] || "", 
+  products = data.records.map(r => ({
+    id: r.id,
+    name: r.fields["Product Name"] || "",
+    brand: r.fields["Brand"] || "",
+    type: r.fields["Product Type"] || "",
+    rating: r.fields["Rating"] || "",
     image: r.fields["Product Image"],
     barcode: r.fields["Barcode"] || ""
-  })); 
+  }));
 
-  document.getElementById("status").innerText = 
-    `Loaded ${products.length} products`; 
+  document.getElementById("status").innerText =
+    `Loaded ${products.length} products`;
 
-  render(products); 
-} 
+  render(products);
 
-function render(list) { 
+}
 
-  const box = document.getElementById("results"); 
-  box.innerHTML = ""; 
+/* ---------------- RENDER ---------------- */
 
-  list.slice(0, visibleCount).forEach(p => { 
+function render(list) {
 
-    const div = document.createElement("div"); 
+  const box = document.getElementById("results");
 
-    div.style.maxWidth = "420px"; 
-    div.style.margin = "10px auto"; 
-    div.style.padding = "14px"; 
-    div.style.borderRadius = "14px"; 
-    div.style.background = "#fff"; 
-    div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)"; 
-    div.style.cursor = "pointer"; 
-    div.style.transition = "0.2s"; 
+  box.innerHTML = "";
+
+  list.slice(0, visibleCount).forEach(p => {
+
+    const div = document.createElement("div");
+
+    div.style.maxWidth = "420px";
+    div.style.margin = "10px auto";
+    div.style.padding = "14px";
+    div.style.borderRadius = "14px";
+    div.style.background = "#fff";
+    div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)";
+    div.style.cursor = "pointer";
+    div.style.transition = "0.2s";
 
     div.onmouseover = () => {
       div.style.transform = "translateY(-2px)";
@@ -182,29 +194,46 @@ function render(list) {
     };
 
     div.innerHTML = `
-      <div style="font-weight:700;font-size:18px;margin-bottom:4px;color:#111;">
+      <div style="
+        font-weight:700;
+        font-size:18px;
+        margin-bottom:4px;
+        color:#111;
+      ">
         ${p.name}
       </div>
 
-      <div style="font-size:14px;color:#666;margin-bottom:6px;">
+      <div style="
+        font-size:14px;
+        color:#666;
+        margin-bottom:6px;
+      ">
         ${p.type}
       </div>
 
-      <div style="font-size:13px;color:#999;">
+      <div style="
+        font-size:13px;
+        color:#999;
+      ">
         ⭐ ${p.rating || ""}
       </div>
-    `; 
+    `;
 
-    div.onclick = () => { 
-      window.location.href = "product.html?id=" + p.id; 
-    }; 
+    div.onclick = () => {
+      window.location.href =
+        "product.html?id=" + p.id;
+    };
 
-    box.appendChild(div); 
-  }); 
-} 
+    box.appendChild(div);
+
+  });
+
+}
 
 /* ---------------- LOAD MORE ---------------- */
-document.getElementById("loadMoreBtn").onclick = function () {
+
+document.getElementById("loadMoreBtn")
+.onclick = function () {
 
   visibleCount += 5;
 
@@ -213,36 +242,42 @@ document.getElementById("loadMoreBtn").onclick = function () {
 };
 
 /* ---------------- SEARCH ---------------- */
+
 document.getElementById("searchInput")
-.addEventListener("input", (e) => { 
+.addEventListener("input", (e) => {
 
-  const value = e.target.value.toLowerCase(); 
+  const value = e.target.value.toLowerCase();
 
-  const filtered = products.filter(p => 
-    p.name.toLowerCase().includes(value) 
-  ); 
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(value)
+  );
 
-  render(filtered); 
-}); 
+  render(filtered);
+
+});
 
 /* ---------------- BARCODE CLEANER ---------------- */
+
 function cleanBarcode(value) {
+
   return String(value)
     .replace(/,/g, "")
     .replace(".0", "")
     .trim()
     .replace(/^0+/, "");
+
 }
 
 /* ---------------- FIND PRODUCT ---------------- */
+
 function findProductByBarcode(code) {
 
   const cleanedCode = cleanBarcode(code);
 
   return products.find(p => {
 
-    const barcodeList = String(p.barcode)
-      .split(",");
+    const barcodeList =
+      String(p.barcode).split(",");
 
     return barcodeList.some(b =>
       cleanBarcode(b) === cleanedCode
@@ -253,15 +288,18 @@ function findProductByBarcode(code) {
 }
 
 /* ---------------- SCANNER ---------------- */
+
 let scanning = false;
 
-document.getElementById("scanBtn").onclick = function () {
+document.getElementById("scanBtn")
+.onclick = function () {
 
   if (scanning) return;
 
   scanning = true;
 
-  const scanner = document.getElementById("scanner");
+  const scanner =
+    document.getElementById("scanner");
 
   scanner.style.display = "block";
 
@@ -299,13 +337,10 @@ document.getElementById("scanBtn").onclick = function () {
 
     const code = data.codeResult.code;
 
-    console.log("SCANNED:", code);
-
-    const product = findProductByBarcode(code);
+    const product =
+      findProductByBarcode(code);
 
     if (product) {
-
-      alert("FOUND: " + product.name);
 
       Quagga.stop();
 
@@ -316,63 +351,19 @@ document.getElementById("scanBtn").onclick = function () {
       window.location.href =
         "product.html?id=" + product.id;
 
-    } else {
-
-      console.log("NO MATCH");
-
     }
 
   });
 
 };
-document.getElementById("subscribeBtn")
-.onclick = async function () {
 
-  const email =
-    document.getElementById("emailInput").value;
-
-  if (!email) {
-    alert("Enter an email");
-    return;
-  }
-
-  const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
-    {
-      method: "POST",
-
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        fields: {
-          Email: email
-        }
-      })
-    }
-  );
-
-  if (res.ok) {
-
-    alert("Subscribed!");
-
-    document.getElementById("emailInput").value = "";
-
-  } else {
-
-    alert("Something went wrong");
-
-  }
-
-};
-  
 loadProducts();
 
 </script>
-  
-  <div style="
+
+<!-- FOOTER -->
+
+<div style="
   background:#846879;
   margin-top:80px;
   padding:50px 20px;
@@ -389,7 +380,9 @@ loadProducts();
   ">
 
     <!-- LEFT -->
+
     <div>
+
       <div style="
         font-size:24px;
         font-family:Courier New;
@@ -398,15 +391,21 @@ loadProducts();
         BeautyIQ
       </div>
 
-      <div style="font-size:14px; line-height:1.8;">
+      <div style="
+        font-size:14px;
+        line-height:1.8;
+      ">
         Scan products<br>
         Search ingredients<br>
         Learn skincare
       </div>
+
     </div>
 
     <!-- CENTER -->
+
     <div>
+
       <div style="
         font-size:18px;
         margin-bottom:15px;
@@ -414,15 +413,21 @@ loadProducts();
         Socials
       </div>
 
-      <div style="font-size:14px; line-height:2;">
+      <div style="
+        font-size:14px;
+        line-height:2;
+      ">
         TikTok<br>
         Instagram<br>
         Contact
       </div>
+
     </div>
 
     <!-- RIGHT -->
+
     <div>
+
       <div style="
         font-size:18px;
         margin-bottom:15px;
@@ -430,36 +435,89 @@ loadProducts();
         Join Updates
       </div>
 
-     <input
-  id="emailInput"
-  placeholder="Email address"
-  style="
-    padding:12px;
-    width:220px;
-    border:none;
-    border-radius:10px;
-    outline:none;
-    margin-bottom:10px;
-  "
->
+      <input
+        id="emailInput"
+        placeholder="Email address"
+        style="
+          padding:12px;
+          width:220px;
+          border:none;
+          border-radius:10px;
+          outline:none;
+          margin-bottom:10px;
+        "
+      >
 
-<br>
+      <br>
 
-<button id="subscribeBtn" style="
-  padding:10px 18px;
-  border:none;
-  border-radius:10px;
-  background:white;
-  color:#846879;
-  cursor:pointer;
-  font-weight:bold;
-">
-  Subscribe
-</button>
+      <button id="subscribeBtn" style="
+        padding:10px 18px;
+        border:none;
+        border-radius:10px;
+        background:white;
+        color:#846879;
+        cursor:pointer;
+        font-weight:bold;
+      ">
+        Subscribe
+      </button>
+
     </div>
 
   </div>
 
 </div>
+
+<script>
+
+document.getElementById("subscribeBtn")
+.onclick = async function () {
+
+  const email =
+    document.getElementById("emailInput").value;
+
+  if (!email) {
+
+    alert("Enter an email");
+
+    return;
+
+  }
+
+  const res = await fetch(
+    `https://api.airtable.com/v0/${BASE_ID}/Subscribers`,
+    {
+
+      method: "POST",
+
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        fields: {
+          Email: email
+        }
+      })
+
+    }
+  );
+
+  if (res.ok) {
+
+    alert("Subscribed!");
+
+    document.getElementById("emailInput").value = "";
+
+  } else {
+
+    alert("Something went wrong");
+
+  }
+
+};
+
+</script>
 
 </div>
