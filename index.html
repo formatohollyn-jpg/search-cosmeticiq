@@ -18,17 +18,20 @@ body {
   pointer-events: none;
 }
 
+/* ONLY vertical movement here */
 .bubble-wrap {
   position: absolute;
   bottom: -120px;
   animation: floatUp 14s linear infinite;
 }
 
+/* ONLY horizontal movement here (IMPORTANT FIX) */
 .bubble-img {
   display: block;
   animation: sway 6s ease-in-out infinite;
 }
 
+/* vertical float */
 @keyframes floatUp {
   0% {
     transform: translateY(0px) scale(1);
@@ -36,25 +39,25 @@ body {
   }
 
   5% {
-    opacity: 1; /* appear quickly */
+    opacity: 1;
   }
 
   90% {
-    opacity: 1; /* stay fully visible almost entire way */
+    opacity: 1;
   }
 
   100% {
     transform: translateY(-120vh) scale(1.05);
-    opacity: 0; /* ONLY fade at top */
+    opacity: 0;
   }
 }
 
-/* horizontal drift ONLY */
+/* smooth natural sway */
 @keyframes sway {
   0%   { transform: translateX(0px); }
-  25%  { transform: translateX(10px); }
-  50%  { transform: translateX(-12px); }
-  75%  { transform: translateX(8px); }
+  25%  { transform: translateX(12px); }
+  50%  { transform: translateX(-14px); }
+  75%  { transform: translateX(10px); }
   100% { transform: translateX(0px); }
 }
 </style>
