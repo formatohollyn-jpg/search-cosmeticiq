@@ -21,19 +21,23 @@
       animation-delay: 6s;
     }
 
- @keyframes floatUp {
+@keyframes floatUp {
   0% {
     transform: translateY(0) translateX(0);
     opacity: 0;
   }
 
   10% {
-    opacity: 0.85;
+    opacity: 0.9; /* fully visible early */
+  }
+
+  85% {
+    opacity: 0.9; /* stay visible almost all the way */
   }
 
   100% {
     transform: translateY(-120vh) translateX(20px);
-    opacity: 0;
+    opacity: 0; /* only fade at the very top */
   }
 }
 </style>
