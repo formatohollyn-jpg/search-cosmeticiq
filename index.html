@@ -23,21 +23,29 @@
 
 @keyframes floatUp {
   0% {
-    transform: translateY(0) translateX(0);
+    transform: translateY(0) translateX(0) scale(1);
     opacity: 0;
   }
 
   10% {
-    opacity: 0.9; /* fully visible early */
+    opacity: 0.9;
   }
 
-  85% {
-    opacity: 0.9; /* stay visible almost all the way */
+  25% {
+    transform: translateY(-30vh) translateX(15px) scale(1.02);
+  }
+
+  50% {
+    transform: translateY(-60vh) translateX(-20px) scale(0.98);
+  }
+
+  75% {
+    transform: translateY(-90vh) translateX(10px) scale(1.01);
   }
 
   100% {
-    transform: translateY(-120vh) translateX(20px);
-    opacity: 0; /* only fade at the very top */
+    transform: translateY(-120vh) translateX(-15px) scale(1);
+    opacity: 0;
   }
 }
 </style>
