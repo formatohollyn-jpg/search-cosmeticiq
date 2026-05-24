@@ -25,7 +25,7 @@ www.tiktok.com/@beauty_iq032
 
 <h1 style=" 
 text-align:center; 
-Font-size:70px;
+font-size:70px;
 margin-bottom:40px; 
 color:#846879; 
 font-family:Courier,Courier New; 
@@ -97,7 +97,21 @@ BeautyIQ
   font-size:14px;
 "></div> 
 
-<div id="results"></div> 
+<div id="results"></div>
+
+<div style="text-align:center; margin:30px 0;">
+  <button id="loadMoreBtn" style="
+    padding:12px 18px;
+    border:none;
+    border-radius:999px;
+    background:#846879;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+  ">
+    ↓
+  </button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
@@ -108,6 +122,7 @@ const TABLE_NAME = "Table 1";
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0"; 
 
 let products = [];
+let visibleCount = 10;
 
 /* ---------------- LOAD PRODUCTS ---------------- */
 async function loadProducts() { 
@@ -145,7 +160,7 @@ function render(list) {
   const box = document.getElementById("results"); 
   box.innerHTML = ""; 
 
-  list.slice(0, 5).forEach(p => { 
+  list.slice(0, visibleCount).forEach(p => { 
 
     const div = document.createElement("div"); 
 
@@ -158,16 +173,23 @@ function render(list) {
     div.style.cursor = "pointer"; 
     div.style.transition = "0.2s"; 
 
-    div.onmouseover = () => div.style.transform = "translateY(-2px)"; 
-    div.onmouseout = () => div.style.transform = "translateY(0px)"; 
+    div.onmouseover = () => {
+      div.style.transform = "translateY(-2px)";
+    };
+
+    div.onmouseout = () => {
+      div.style.transform = "translateY(0px)";
+    };
 
     div.innerHTML = `
       <div style="font-weight:700;font-size:18px;margin-bottom:4px;color:#111;">
         ${p.name}
       </div>
+
       <div style="font-size:14px;color:#666;margin-bottom:6px;">
         ${p.type}
       </div>
+
       <div style="font-size:13px;color:#999;">
         ⭐ ${p.rating || ""}
       </div>
@@ -180,6 +202,16 @@ function render(list) {
     box.appendChild(div); 
   }); 
 } 
+
+/* ---------------- LOAD MORE ---------------- */
+document.getElementById("loadMoreBtn")
+.onclick = function () {
+
+  visibleCount += 10;
+
+  render(products);
+
+};
 
 /* ---------------- SEARCH ---------------- */
 document.getElementById("searchInput")
@@ -194,6 +226,7 @@ document.getElementById("searchInput")
   render(filtered); 
 }); 
 
+/* ---------------- BARCODE CLEANER ---------------- */
 function cleanBarcode(value) {
   return String(value)
     .replace(/,/g, "")
@@ -202,6 +235,7 @@ function cleanBarcode(value) {
     .replace(/^0+/, "");
 }
 
+/* ---------------- FIND PRODUCT ---------------- */
 function findProductByBarcode(code) {
 
   const cleanedCode = cleanBarcode(code);
@@ -216,8 +250,10 @@ function findProductByBarcode(code) {
     );
 
   });
-  }
 
+}
+
+/* ---------------- SCANNER ---------------- */
 let scanning = false;
 
 document.getElementById("scanBtn").onclick = function () {
@@ -227,9 +263,11 @@ document.getElementById("scanBtn").onclick = function () {
   scanning = true;
 
   const scanner = document.getElementById("scanner");
+
   scanner.style.display = "block";
 
   Quagga.init({
+
     inputStream: {
       type: "LiveStream",
       target: scanner,
@@ -255,6 +293,7 @@ document.getElementById("scanBtn").onclick = function () {
     }
 
     Quagga.start();
+
   });
 
   Quagga.onDetected(function (data) {
@@ -287,7 +326,9 @@ document.getElementById("scanBtn").onclick = function () {
   });
 
 };
+
 loadProducts();
 
 </script>
+
 </div>
