@@ -36,12 +36,6 @@ BeautyIQ
 <div style="
   max-width:500px;
   margin:50px auto 40px;
-  position:relative;
-">
-
-<div style="
-  max-width:500px;
-  margin:50px auto 40px;
   display:flex;
   gap:10px;
   align-items:center;
@@ -97,8 +91,6 @@ BeautyIQ
   display:none;
 "></div>
 
-</div>
-
 <div id="status" 
 style=" 
 text-align:center; 
@@ -108,7 +100,7 @@ font-size:14px; ">
 </div> 
 
 <div id="results"></div> 
-  
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
 <script>
@@ -117,51 +109,9 @@ const BASE_ID = "apph6wlZKiRLkKk8k";
 const TABLE_NAME = "Table 1"; 
 const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0"; 
 
-document.getElementById("scanBtn").onclick = function () {
+let products = [];
 
-  const scanner = document.getElementById("scanner");
-  scanner.style.display = "block";
-
-  Quagga.init({
-    inputStream: {
-      type: "LiveStream",
-      target: scanner,
-      constraints: {
-        facingMode: "environment"
-      }
-    },
-    decoder: {
-      readers: ["ean_reader", "upc_reader"]
-    }
-  }, function (err) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    Quagga.start();
-  });
-
-  Quagga.onDetected(function (data) {
-    const code = data.codeResult.code;
-
-    alert("Scanned: " + code);
-
-    Quagga.stop();
-  });
-
-};
-
-loadProducts(); 
-
-</script>
-<script> 
-
-const BASE_ID = "apph6wlZKiRLkKk8k"; 
-const TABLE_NAME = "Table 1"; 
-const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0"; 
-
-let products = []; 
-
+/* ✅ LOAD DATA */
 async function loadProducts() { 
 
   const res = await fetch(
@@ -191,6 +141,7 @@ async function loadProducts() {
   render(products); 
 } 
 
+/* ✅ RENDER */
 function render(list) { 
 
   const box = document.getElementById("results"); 
@@ -209,36 +160,19 @@ function render(list) {
     div.style.cursor = "pointer"; 
     div.style.transition = "0.2s"; 
 
-    div.onmouseover = () => { 
-      div.style.transform = "translateY(-2px)"; 
-    }; 
-
-    div.onmouseout = () => { 
-      div.style.transform = "translateY(0px)"; 
-    }; 
+    div.onmouseover = () => div.style.transform = "translateY(-2px)"; 
+    div.onmouseout = () => div.style.transform = "translateY(0px)"; 
 
     div.innerHTML = `
-      <div style="
-        font-weight:700;
-        font-size:18px;
-        margin-bottom:4px;
-        color:#111;
-      ">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;color:#111;">
         ${p.name}
       </div>
 
-      <div style="
-        font-size:14px;
-        color:#666;
-        margin-bottom:6px;
-      ">
+      <div style="font-size:14px;color:#666;margin-bottom:6px;">
         ${p.type}
       </div>
 
-      <div style="
-        font-size:13px;
-        color:#999;
-      ">
+      <div style="font-size:13px;color:#999;">
         ⭐ ${p.rating || ""}
       </div>
     `; 
@@ -251,6 +185,7 @@ function render(list) {
   }); 
 } 
 
+/* ✅ SEARCH */
 document.getElementById("searchInput")
 .addEventListener("input", (e) => { 
 
@@ -263,8 +198,56 @@ document.getElementById("searchInput")
   render(filtered); 
 }); 
 
-loadProducts(); 
+/* ✅ BARCODE LOOKUP */
+function findProductByBarcode(code) {
+  return products.find(p => String(p.barcode) === String(code));
+}
+
+/* ✅ SCAN BUTTON */
+document.getElementById("scanBtn").onclick = function () {
+
+  const scanner = document.getElementById("scanner");
+  scanner.style.display = "block";
+
+  Quagga.init({
+    inputStream: {
+      type: "LiveStream",
+      target: scanner,
+      constraints: {
+        facingMode: "environment"
+      }
+    },
+    decoder: {
+      readers: ["ean_reader", "upc_reader"]
+    }
+  }, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    Quagga.start();
+  });
+
+};
+
+/* ✅ DETECTION (IMPORTANT: OUTSIDE BUTTON) */
+Quagga.onDetected(function (data) {
+
+  const code = data.codeResult.code;
+
+  const product = findProductByBarcode(code);
+
+  if (product) {
+    window.location.href = "product.html?id=" + product.id;
+  } else {
+    alert("No product found for barcode: " + code);
+  }
+
+  Quagga.stop();
+});
+
+/* ✅ START */
+loadProducts();
 
 </script> 
-
 </div>
