@@ -181,7 +181,8 @@ async function loadProducts() {
     brand: r.fields["Brand"] || "", 
     type: r.fields["Product Type"] || "", 
     rating: r.fields["Rating"] || "", 
-    image: r.fields["Product Image"] 
+    image: r.fields["Product Image"],
+    barcode: r.fields["Barcode"] || ""
   })); 
 
   document.getElementById("status").innerText = 
