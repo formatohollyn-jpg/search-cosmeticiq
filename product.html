@@ -223,10 +223,24 @@ async function loadIngredients() {
 
 function getIngredientData(name, db) {
 
-  return db.find(i =>
-    i.name.toLowerCase().trim() ===
-    name.toLowerCase().trim()
-  );
+  const cleanedName = name
+    .toLowerCase()
+    .replace(/[()]/g, "")
+    .replace(/\//g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return db.find(i => {
+
+    const dbName = (i.name || "")
+      .toLowerCase()
+      .replace(/[()]/g, "")
+      .replace(/\//g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    return dbName === cleanedName;
+  });
 
 }
 
