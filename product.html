@@ -293,11 +293,18 @@ async function loadProduct() {
 
     console.log(productUrl);
 
-    const res = await fetch(productUrl, {
-      headers: {
-        Authorization: `Bearer ${PRODUCT_TOKEN}`
-      }
-    });
+   const res = await fetch(productUrl, {
+  headers: {
+    Authorization: `Bearer ${PRODUCT_TOKEN}`
+  }
+});
+
+console.log("STATUS:", res.status);
+
+const text = await res.text();
+console.log("RAW RESPONSE:", text);
+
+const r = JSON.parse(text);
 
     const r = await res.json();
 
