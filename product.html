@@ -231,21 +231,6 @@ async function loadIngredients() {
 
 }
 
-  const data = await res.json();
-  
- console.log("INGREDIENT COUNT:", data.records.length);
-
-  console.log("INGREDIENT DATABASE:", data);
-
-  return data.records.map(r => ({
-    name: r.fields["Ingredient"] || "",
-    score: Number(r.fields["Risk Score"]) || 0,
-    level: r.fields["Risk Level"] || "No Risk",
-    why: r.fields["Why"] || ""
-  }));
-
-}
-
 
 /* =========================
    MATCH INGREDIENT
