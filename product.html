@@ -322,14 +322,18 @@ async function loadProduct() {
 
     let ingredientHTML = "";
 
-    ingredientList.forEach(ingredient => {
+  ingredientList.forEach(ingredient => {
 
-      const match =
-        getIngredientData(ingredient, ingredientDB);
+  console.log("LOOKING FOR:", ingredient);
 
-      let score = 5;
-      let level = "Low Risk";
-      let why = "Ingredient not found in database yet.";
+  const match =
+    getIngredientData(ingredient, ingredientDB);
+
+  console.log("MATCH:", match);
+
+  let score = 5;
+  let level = "Low Risk";
+  let why = "Ingredient not found in database yet.";
 
       if (match) {
         score = match.score;
