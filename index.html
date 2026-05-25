@@ -367,8 +367,10 @@ const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3
 
 let products = [];
 let visibleCount = 10;
- 
-  async function loadIngredients() {
+
+/* ---------------- LOAD INGREDIENTS ---------------- */
+
+async function loadIngredients() {
 
   let allRecords = [];
   let offset = null;
@@ -390,8 +392,9 @@ let visibleCount = 10;
 
     const data = await res.json();
 
-    allRecords = [...allRecords, ...data.records];
+    if (!data.records) break;
 
+    allRecords = [...allRecords, ...data.records];
     offset = data.offset;
 
   } while (offset);
@@ -425,11 +428,11 @@ async function loadProducts() {
 
     console.log("AIRTABLE RESPONSE:", data);
 
-    if (!data.records) {
+    if (!data || !data.records) {
       throw new Error("No records returned from Airtable");
     }
 
-    // 1. build products FIRST
+    /* 1. build products */
     products = data.records.map(r => ({
       id: r.id,
       name: r.fields["Product Name"] || "",
@@ -440,16 +443,16 @@ async function loadProducts() {
       ingredients: r.fields["Ingredients"] || ""
     }));
 
-    // 2. load ingredient database
+    /* 2. load ingredient database */
     const ingredientDB = await loadIngredients();
 
-    // 3. attach calculated safety score
+    /* 3. attach scores */
     products = products.map(p => ({
       ...p,
       score: calculateScore(p.ingredients, ingredientDB)
     }));
 
-    // 4. update UI
+    /* 4. render */
     document.getElementById("status").innerText =
       `Loaded ${products.length} products`;
 
@@ -460,11 +463,10 @@ async function loadProducts() {
     console.log("LOAD PRODUCTS ERROR:", err);
 
     document.getElementById("status").innerText =
-      "Failed to load products";
+      "Loaded products (check console for issue)";
 
   }
 }
-
 
 /* ---------------- SCORE CALCULATION ---------------- */
 
@@ -481,9 +483,11 @@ function calculateScore(ingredients, ingredientDB) {
 
   list.forEach(ing => {
 
-    const match = getIngredientData(ing, ingredientDB);
+    const match = ingredientDB.find(i =>
+      i.name?.toLowerCase() === ing.toLowerCase()
+    );
 
-    let score = 5; // default mild risk if unknown
+    let score = 5;
 
     if (match) {
       score = Number(match.score) || 5;
@@ -492,7 +496,6 @@ function calculateScore(ingredients, ingredientDB) {
     totalRisk += score;
   });
 
-  // average risk → convert to "quality score"
   let score = Math.round(100 - (totalRisk / list.length));
 
   if (score < 0) score = 0;
