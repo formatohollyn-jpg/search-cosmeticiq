@@ -385,26 +385,52 @@ async function loadProducts() {
 
     const data = await res.json();
 
-    console.log(data);
+    console.log("AIRTABLE RESPONSE:", data);
 
-   products = data.records.map(r => ({
-  id: r.id,
-  name: r.fields["Product Name"] || "",
-  brand: r.fields["Brand"] || "",
-  type: r.fields["Product Type"] || "",
-  image: r.fields["Product Image"],
-  barcode: r.fields["Barcode"] || "",
-  ingredients: r.fields["Ingredients"] || ""
-}));
+    if (!data.records) {
+      throw new Error("No records returned from Airtable");
+    }
+
+    // 1. build products FIRST
+    products = data.records.map(r => ({
+      id: r.id,
+      name: r.fields["Product Name"] || "",
+      brand: r.fields["Brand"] || "",
+      type: r.fields["Product Type"] || "",
+      image: r.fields["Product Image"],
+      barcode: r.fields["Barcode"] || "",
+      ingredients: r.fields["Ingredients"] || ""
+    }));
+
+    // 2. load ingredient database
     const ingredientDB = await loadIngredients();
 
-products = products.map(p => ({
-  ...p,
-  score: calculateScore(p.ingredients, ingredientDB)
-}));
-    
-  
-    function calculateScore(ingredients, ingredientDB) {
+    // 3. attach calculated safety score
+    products = products.map(p => ({
+      ...p,
+      score: calculateScore(p.ingredients, ingredientDB)
+    }));
+
+    // 4. update UI
+    document.getElementById("status").innerText =
+      `Loaded ${products.length} products`;
+
+    render(products);
+
+  } catch (err) {
+
+    console.log("LOAD PRODUCTS ERROR:", err);
+
+    document.getElementById("status").innerText =
+      "Failed to load products";
+
+  }
+}
+
+
+/* ---------------- SCORE CALCULATION ---------------- */
+
+function calculateScore(ingredients, ingredientDB) {
 
   if (!ingredients) return 50;
 
@@ -419,37 +445,22 @@ products = products.map(p => ({
 
     const match = getIngredientData(ing, ingredientDB);
 
-    let score = 5;
+    let score = 5; // default mild risk if unknown
 
     if (match) {
-      score = Number(match.score);
+      score = Number(match.score) || 5;
     }
 
     totalRisk += score;
   });
 
+  // average risk → convert to "quality score"
   let score = Math.round(100 - (totalRisk / list.length));
 
   if (score < 0) score = 0;
   if (score > 100) score = 100;
 
   return score;
-}
-
-    document.getElementById("status").innerText =
-      `Loaded ${products.length} products`;
-
-    render(products);
-
-  } catch(err) {
-
-    console.log(err);
-
-    document.getElementById("status").innerText =
-      "Failed to load products";
-
-  }
-
 }
 
 /* ---------------- RENDER ---------------- */
