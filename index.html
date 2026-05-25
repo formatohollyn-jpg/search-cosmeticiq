@@ -367,6 +367,44 @@ const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3
 
 let products = [];
 let visibleCount = 10;
+ 
+  async function loadIngredients() {
+
+  let allRecords = [];
+  let offset = null;
+
+  do {
+
+    let url =
+      `https://api.airtable.com/v0/${INGREDIENT_BASE_ID}/${INGREDIENT_TABLE}`;
+
+    if (offset) {
+      url += `?offset=${offset}`;
+    }
+
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${INGREDIENT_TOKEN}`
+      }
+    });
+
+    const data = await res.json();
+
+    allRecords = [...allRecords, ...data.records];
+
+    offset = data.offset;
+
+  } while (offset);
+
+  console.log("TOTAL INGREDIENTS:", allRecords.length);
+
+  return allRecords.map(r => ({
+    name: r.fields["Ingredient"],
+    score: r.fields["Risk Score"] || 5,
+    level: r.fields["Risk Level"] || "Low",
+    why: r.fields["Why"] || ""
+  }));
+}
 
 /* ---------------- LOAD PRODUCTS ---------------- */
 
