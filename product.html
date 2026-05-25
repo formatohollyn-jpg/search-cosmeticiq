@@ -221,25 +221,29 @@ async function loadIngredients() {
    MATCH INGREDIENT
 ========================= */
 
-function getIngredientData(name, db) {
+function cleanIngredient(text) {
 
-  const cleanedName = name
+  return (text || "")
     .toLowerCase()
+    .replace(/[.,]/g, "")
     .replace(/[()]/g, "")
     .replace(/\//g, " ")
+    .replace(/-/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 
+}
+
+function getIngredientData(name, db) {
+
+  const cleanedName = cleanIngredient(name);
+
   return db.find(i => {
 
-    const dbName = (i.name || "")
-      .toLowerCase()
-      .replace(/[()]/g, "")
-      .replace(/\//g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+    const dbName = cleanIngredient(i.name);
 
     return dbName === cleanedName;
+
   });
 
 }
