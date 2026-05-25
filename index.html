@@ -62,36 +62,36 @@ body {
   100% { transform: translateX(0px); }
 }
 
-   .dropdown {
+  <style>
+
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+}
+
+/* your bubbles etc... */
+
+/* DROPDOWN MENU */
+   
+.dropdown {
   display:none;
   position:absolute;
-  top:25px;
+  top:100%;
   left:0;
   background:rgba(255,248,245,0.95);
   backdrop-filter:blur(12px);
   padding:10px;
   border-radius:12px;
-  min-width:140px;
+  min-width:160px;
   box-shadow:0 6px 20px rgba(0,0,0,0.08);
   z-index:2000;
 }
 
-.dropdown div {
-  padding:8px;
-  cursor:pointer;
-  font-size:13px;
-  color:#846879;
-}
-
-.dropdown div:hover {
-  background:#f7e8ef;
-  border-radius:8px;
-}
-
-/* show dropdown on hover */
-div[style*="position:relative"]:hover .dropdown {
+div[style*="position:relative"]:hover .dropdown,
+.dropdown:hover {
   display:block;
 }
+
 </style>
 
 </head>
