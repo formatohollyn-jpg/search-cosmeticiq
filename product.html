@@ -581,14 +581,12 @@ gap:20px;
 
   }
 
-  catch (err) {
+catch (err) {
+  console.log("FULL ERROR:", err);
 
-    console.log(err);
-
-    document.getElementById("content").innerHTML =
-      `<div class="error">Could not load product.</div>`;
-
-  }
+  document.getElementById("content").innerHTML =
+    `<div class="error">Could not load product. Check console.</div>`;
+}
 
 }
 
