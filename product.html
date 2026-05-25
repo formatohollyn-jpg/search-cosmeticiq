@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+this is my full page code idk where the container is for the table or chart or whatever. <!DOCTYPE html>
 <html>
 <head>
   <title>Product</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -16,6 +17,7 @@
       margin: 40px auto;
       background: rgba(255,255,255,0.65);
       backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 18px;
       padding: 24px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.06);
@@ -24,26 +26,70 @@
       flex-wrap: wrap;
     }
 
-    .image-box { flex: 1; min-width: 280px; }
+    .image-box {
+      flex: 1;
+      min-width: 280px;
+    }
 
     .image-box img {
       width: 100%;
       border-radius: 16px;
+      object-fit: cover;
+      background: #eee;
     }
 
-    .info { flex: 1; min-width: 280px; }
+    .info {
+      flex: 1;
+      min-width: 280px;
+    }
 
-    .name { font-size: 28px; font-weight: bold; color:#846879; }
-    .brand, .type { color:#846879; }
+    .name {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color:#2c2c2c;
+    }
 
-    .error { text-align:center; margin-top:80px; color:red; }
-    .loading { text-align:center; margin-top:80px; color:#777; }
+    .brand {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .rating {
+      font-size: 15px;
+      color: #846879;
+      margin-bottom: 18px;
+      font-weight: bold;
+    }
+
+    .type {
+      display: inline-block;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      color:#846879;
+    }
+
+    .loading {
+      text-align: center;
+      margin-top: 80px;
+      color: #777;
+    }
+
+    .error {
+      text-align: center;
+      margin-top: 80px;
+      color: red;
+    }
 
     .score-box {
       margin: 18px 0;
       padding: 18px;
       border-radius: 16px;
       background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.4);
     }
 
     .score-number {
@@ -52,72 +98,129 @@
       color:#846879;
     }
 
+    .score-label {
+      font-size: 14px;
+      color:#777;
+      margin-top:4px;
+    }
+
     .ingredient-table {
       width:100%;
       margin-top:18px;
       border-collapse: collapse;
-    }
-
-    .ingredient-table th,
-    .ingredient-table td {
-      padding:10px;
-      border-bottom:1px solid #eee;
-      text-align:center;
+      font-size:14px;
     }
 
     .ingredient-table th {
-      background:#f4e8ef;
+  text-align:center;
+  padding:10px;
+  background:#f4e8ef;
+  color:#846879;
+}
+
+    .ingredient-table td {
+      padding:10px;
+      border-bottom:1px solid #eee;
     }
+
+    .risk-low {
+      color:#b88700;
+      font-weight:bold;
+    }
+
+    .risk-none {
+      color:#4f8f5a;
+      font-weight:bold;
+    }
+
+    .risk-moderate {
+      color:#d97706;
+      font-weight:bold;
+    }
+
+    .risk-high {
+      color:#c0392b;
+      font-weight:bold;
+    }
+
   </style>
 </head>
 
 <body>
 
-<div id="content" class="loading">Loading product...</div>
+<div id="content" class="loading">
+  Loading product...
+</div>
 
 <script>
 
-/* =======================
-   DATABASE INFO
-======================= */
+/* =========================
+   PRODUCTS DATABASE
+========================= */
 
 const PRODUCT_BASE_ID = "apph6wlZKiRLkKk8k";
-const PRODUCT_TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
-const PRODUCT_TABLE = "Table 1"; // IMPORTANT: keep normal, NOT encoded
+
+const PRODUCT_TOKEN =
+"patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
+
+const PRODUCT_TABLE = "Table 1";
+
+
+/* =========================
+   INGREDIENT DATABASE
+========================= */
 
 const INGREDIENT_BASE_ID = "appEonAf1g5YbUi7Q";
-const INGREDIENT_TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";
+
+const INGREDIENT_TOKEN =
+"pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";
+
 const INGREDIENT_TABLE = "Ingredients";
 
-/* =======================
+
+/* =========================
    GET PRODUCT ID
-======================= */
+========================= */
 
 function getProductId() {
-  return new URLSearchParams(window.location.search).get("id");
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
 }
 
-/* =======================
-   LOAD INGREDIENTS
-======================= */
+
+/* =========================
+   LOAD INGREDIENT DATABASE
+========================= */
 
 async function loadIngredients() {
+
   let allRecords = [];
   let offset = null;
 
   do {
-    let url = `https://api.airtable.com/v0/${INGREDIENT_BASE_ID}/${INGREDIENT_TABLE}`;
-    if (offset) url += `?offset=${offset}`;
+
+    let url =
+      `https://api.airtable.com/v0/${INGREDIENT_BASE_ID}/${INGREDIENT_TABLE}`;
+
+    if (offset) {
+      url += `?offset=${offset}`;
+    }
 
     const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${INGREDIENT_TOKEN}` }
+      headers: {
+        Authorization: `Bearer ${INGREDIENT_TOKEN}`
+      }
     });
 
     const data = await res.json();
+
     allRecords = [...allRecords, ...data.records];
+
     offset = data.offset;
 
   } while (offset);
+
+  console.log("TOTAL INGREDIENTS:", allRecords.length);
 
   return allRecords.map(r => ({
     name: r.fields["Ingredient"],
@@ -125,11 +228,45 @@ async function loadIngredients() {
     level: r.fields["Risk Level"] || "Low",
     why: r.fields["Why"] || ""
   }));
+
 }
 
-/* =======================
+
+/* =========================
+   MATCH INGREDIENT
+========================= */
+
+function cleanIngredient(text) {
+
+  return (text || "")
+    .toLowerCase()
+    .replace(/[.,]/g, "")
+    .replace(/[()]/g, "")
+    .replace(/\//g, " ")
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+}
+
+function getIngredientData(name, db) {
+
+  const cleanedName = cleanIngredient(name);
+
+  return db.find(i => {
+
+    const dbName = cleanIngredient(i.name);
+
+    return dbName === cleanedName;
+
+  });
+
+}
+
+
+/* =========================
    LOAD PRODUCT
-======================= */
+========================= */
 
 async function loadProduct() {
 
@@ -138,15 +275,21 @@ async function loadProduct() {
   console.log("PRODUCT ID:", id);
 
   if (!id) {
+
     document.getElementById("content").innerHTML =
       `<div class="error">No product selected.</div>`;
+
     return;
   }
 
   try {
 
+    /* LOAD PRODUCT */
+
     const productUrl =
       `https://api.airtable.com/v0/${PRODUCT_BASE_ID}/${PRODUCT_TABLE}/${id}`;
+
+    console.log(productUrl);
 
     const res = await fetch(productUrl, {
       headers: {
@@ -154,103 +297,287 @@ async function loadProduct() {
       }
     });
 
-    console.log("STATUS:", res.status);
+    const r = await res.json();
 
-    const text = await res.text();
-    console.log("RAW RESPONSE:", text);
+    console.log("PRODUCT RESPONSE:", r);
 
-    if (!res.ok) {
-      throw new Error(text);
-    }
-
-    const r = JSON.parse(text);
-
-    console.log("PARSED RECORD:", r);
-
-    if (!r || !r.fields) {
-      throw new Error("Missing fields in Airtable response");
+    if (r.error) {
+      throw new Error(r.error.message);
     }
 
     const p = {
+
       name: r.fields["Product Name"] || "Unnamed Product",
+
       brand: r.fields["Brand"] || "",
+
       type: r.fields["Product Type"] || "",
+
       image: r.fields["Product Image"],
+
       ingredients: r.fields["Ingredients"] || ""
+
     };
 
     const imgUrl = p.image?.[0]?.url;
 
-    /* LOAD INGREDIENTS */
+
+    /* LOAD INGREDIENT DB */
+
     const ingredientDB = await loadIngredients();
 
-    const ingredientList = p.ingredients
+
+    /* ANALYZE INGREDIENTS */
+
+    const ingredientList =
+      p.ingredients
       .split(",")
       .map(i => i.trim())
-      .filter(Boolean);
+      .filter(i => i.length > 0);
 
-    let ingredientHTML = "";
     let totalRisk = 0;
 
-    ingredientList.forEach(i => {
-      const match = ingredientDB.find(x => x.name === i);
+    let ingredientHTML = "";
 
-      let score = match?.score || 0;
-      let level = match?.level || "UNKNOWN";
-      let why = match?.why || "Not found";
+  ingredientList.forEach(ingredient => {
+
+  console.log("LOOKING FOR:", ingredient);
+
+  const match =
+    getIngredientData(ingredient, ingredientDB);
+
+  console.log("MATCH:", match);
+
+  let score = 5;
+  let level = "UNKNOWN";
+  let why = "Ingredient not found in database yet.";
+
+      if (match) {
+        score = match.score;
+        level = match.level;
+        why = match.why;
+      }
 
       totalRisk += score;
 
+      let riskClass = "risk-low";
+
+      if (level.toLowerCase().includes("no")) {
+        riskClass = "risk-none";
+      }
+
+      if (level.toLowerCase().includes("moderate")) {
+        riskClass = "risk-moderate";
+      }
+
+      if (level.toLowerCase().includes("high")) {
+        riskClass = "risk-high";
+      }
+
       ingredientHTML += `
         <tr>
-          <td>${i}</td>
+          <td>${ingredient}</td>
           <td>${score}</td>
-          <td>${level}</td>
+          <td class="${riskClass}">${level}</td>
           <td>${why}</td>
         </tr>
       `;
     });
 
-    let productScore = Math.max(0, Math.min(100, Math.round(100 - (totalRisk / ingredientList.length))));
+
+    /* FINAL PRODUCT SCORE */
+
+    /* FINAL PRODUCT SCORE */
+
+/*
+Ingredient scores:
+0 = safest
+100 = highest risk
+
+Product score:
+100 = best formula
+0 = worst formula
+*/
+
+const averageRisk =
+  totalRisk / ingredientList.length;
+
+/* invert risk into quality */
+
+let productScore =
+  Math.round(100 - averageRisk);
+
+/* keep inside bounds */
+
+if (productScore < 0) {
+  productScore = 0;
+}
+
+if (productScore > 100) {
+  productScore = 100;
+}
+
+
+    /* RENDER PAGE */
 
     document.getElementById("content").innerHTML = `
+
+      <button onclick="window.location.href='index.html'"
+        style="
+          position:absolute;
+          top:30px;
+          left:40px;
+          padding:10px 14px;
+          border:none;
+          border-radius:10px;
+          background:#9fb3a0;
+          color:white;
+          cursor:pointer;
+          font-size:14px;
+          z-index:1000;
+        ">
+        ← Back to Search
+      </button>
+
       <div class="container">
 
         <div class="image-box">
-          ${imgUrl ? `<img src="${imgUrl}">` : ""}
+
+          ${
+            imgUrl
+            ? `<img src="${imgUrl}">`
+            : `<div style="height:300px;background:#eee;border-radius:16px;"></div>`
+          }
+
         </div>
 
         <div class="info">
+
           <div class="name">${p.name}</div>
+
           <div class="brand">${p.brand}</div>
+
           <div class="type">${p.type}</div>
 
+        <div class="rating">
+  ☆ ${productScore}/100 BeautyIQ Score
+</div>
+
           <div class="score-box">
-            <div class="score-number">${productScore}/100</div>
+
+            <div class="score-number">
+              ${productScore}/100
+            </div>
+
+            <div class="score-label">
+              BeautyIQ Safety Score
+            </div>
+
           </div>
+
+          <p style="
+            color:#666;
+            line-height:1.6;
+          ">
+            This score is calculated using
+            ingredient-level safety data
+            from the BeautyIQ ingredient database.
+          </p>
 
         </div>
 
       </div>
 
-      <div class="container">
-        <table class="ingredient-table">
-          <tr>
-            <th>Ingredient</th>
-            <th>Score</th>
-            <th>Level</th>
-            <th>Why</th>
-          </tr>
-          ${ingredientHTML}
-        </table>
+      <div class="container" style="margin-top:0;">
+
+        <div style="width:100%;">
+
+          <div style="
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:18px;
+gap:20px;
+">
+
+  <!-- LEFT KEY -->
+
+  <div style="
+    font-size:13px;
+    color:#666;
+    line-height:1.7;
+    min-width:220px;
+  ">
+
+    <strong>Risk Score Key (out of 100)</strong><br>
+
+    <span style="color:#4f8f5a; font-weight:bold;">
+      0–24 = No Risk
+    </span><br>
+
+    <span style="color:#b88700; font-weight:bold;">
+      25–49 = Low Risk
+    </span><br>
+
+    <span style="color:#d97706; font-weight:bold;">
+      50–74 = Moderate Risk
+    </span><br>
+
+    <span style="color:#c0392b; font-weight:bold;">
+      75–100 = High Risk
+    </span>
+
+  </div>
+
+  <!-- CENTER TITLE -->
+
+ <h2 style="
+  color:#846879;
+  margin:0;
+  flex:1;
+  text-align:center;
+  font-size:30px;
+  transform:translateX(-110px);
+">
+  Ingredient Analysis
+</h2>
+
+</div>
+
+          <table class="ingredient-table">
+
+            <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Risk Score</th>
+                <th>Risk Level</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${ingredientHTML}
+            </tbody>
+
+          </table>
+
+        </div>
+
       </div>
+
     `;
 
-  } catch (err) {
-    console.log("ERROR:", err);
-    document.getElementById("content").innerHTML =
-      `<div class="error">Could not load product. Check console.</div>`;
   }
+
+  catch (err) {
+
+    console.log(err);
+
+    document.getElementById("content").innerHTML =
+      `<div class="error">Could not load product.</div>`;
+
+  }
+
 }
 
 loadProduct();
