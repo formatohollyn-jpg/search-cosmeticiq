@@ -164,7 +164,7 @@ const PRODUCT_BASE_ID = "apph6wlZKiRLkKk8k";
 const PRODUCT_TOKEN =
 "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
 
-const PRODUCT_TABLE = "Table%201";
+const PRODUCT_TABLE = "Table 1";
 
 
 /* =========================
@@ -303,6 +303,10 @@ console.log("STATUS:", res.status);
 
 const text = await res.text();
 console.log("RAW RESPONSE:", text);
+
+if (!res.ok) {
+  throw new Error("Airtable error: " + text);
+}
 
 const r = JSON.parse(text);
 
