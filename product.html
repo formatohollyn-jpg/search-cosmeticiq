@@ -194,14 +194,42 @@ function getProductId() {
 
 async function loadIngredients() {
 
-  const res = await fetch(
-    `https://api.airtable.com/v0/${INGREDIENT_BASE_ID}/${INGREDIENT_TABLE}`,
-    {
+  let allRecords = [];
+  let offset = null;
+
+  do {
+
+    let url =
+      `https://api.airtable.com/v0/${INGREDIENT_BASE_ID}/${INGREDIENT_TABLE}`;
+
+    if (offset) {
+      url += `?offset=${offset}`;
+    }
+
+    const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${INGREDIENT_TOKEN}`
       }
-    }
-  );
+    });
+
+    const data = await res.json();
+
+    allRecords = [...allRecords, ...data.records];
+
+    offset = data.offset;
+
+  } while (offset);
+
+  console.log("TOTAL INGREDIENTS:", allRecords.length);
+
+  return allRecords.map(r => ({
+    name: r.fields["Ingredient"],
+    score: r.fields["Risk Score"] || 5,
+    level: r.fields["Risk Level"] || "Low",
+    why: r.fields["Why"] || ""
+  }));
+
+}
 
   const data = await res.json();
   
