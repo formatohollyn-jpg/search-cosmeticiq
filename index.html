@@ -392,7 +392,6 @@ async function loadProducts() {
       name: r.fields["Product Name"] || "",
       brand: r.fields["Brand"] || "",
       type: r.fields["Product Type"] || "",
-      rating: r.fields["Rating"] || "",
       image: r.fields["Product Image"],
       barcode: r.fields["Barcode"] || ""
     }));
@@ -498,7 +497,7 @@ function render(list) {
       align-items:center;
       gap:4px;
       ">
-        ✦ ${p.rating || "No rating"}
+        ✦ ${p.score}/100 BeautyIQ Score
       </div>
 
     `;
