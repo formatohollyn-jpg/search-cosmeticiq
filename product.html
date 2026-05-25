@@ -389,11 +389,35 @@ async function loadProduct() {
 
     /* FINAL PRODUCT SCORE */
 
-    let productScore = Math.max(0, 100 - totalRisk);
+    /* FINAL PRODUCT SCORE */
 
-    if (productScore > 100) {
-      productScore = 100;
-    }
+/*
+Ingredient scores:
+0 = safest
+100 = highest risk
+
+Product score:
+100 = best formula
+0 = worst formula
+*/
+
+const averageRisk =
+  totalRisk / ingredientList.length;
+
+/* invert risk into quality */
+
+let productScore =
+  Math.round(100 - averageRisk);
+
+/* keep inside bounds */
+
+if (productScore < 0) {
+  productScore = 0;
+}
+
+if (productScore > 100) {
+  productScore = 100;
+}
 
 
     /* RENDER PAGE */
