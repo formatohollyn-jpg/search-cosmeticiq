@@ -240,27 +240,28 @@ async function loadIngredients() {
 function cleanIngredient(text) {
 
   return (text || "")
+
     .toLowerCase()
+
+    /* remove anything in parentheses */
+    .replace(/\(.*?\)/g, "")
+
+    /* normalize slashes */
+    .replace(/[\/\\]/g, " ")
+
+    /* normalize dashes */
+    .replace(/[-–—]/g, " ")
+
+    /* remove commas + periods */
     .replace(/[.,]/g, "")
-    .replace(/[()]/g, "")
-    .replace(/\//g, " ")
-    .replace(/-/g, " ")
+
+    /* remove weird invisible unicode spaces */
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+
+    /* collapse spaces */
     .replace(/\s+/g, " ")
+
     .trim();
-
-}
-
-function getIngredientData(name, db) {
-
-  const cleanedName = cleanIngredient(name);
-
-  return db.find(i => {
-
-    const dbName = cleanIngredient(i.name);
-
-    return dbName === cleanedName;
-
-  });
 
 }
 
