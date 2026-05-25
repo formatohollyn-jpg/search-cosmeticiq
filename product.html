@@ -8,15 +8,15 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background:linear-gradient(to bottom,#f7e8ef,#fff8f5);
+      background: linear-gradient(to bottom,#f7e8ef,#fff8f5);
     }
 
     .container {
       max-width: 900px;
       margin: 40px auto;
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 18px;
       padding: 24px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.06);
@@ -34,7 +34,6 @@
       width: 100%;
       border-radius: 16px;
       object-fit: cover;
-      background: #eee;
     }
 
     .info {
@@ -53,18 +52,18 @@
       margin-bottom: 10px;
     }
 
-    .rating {
-      font-size: 14px;
-      color: #888;
-      margin-bottom: 20px;
-    }
-
     .type {
       display: inline-block;
       padding: 6px 10px;
       background: #f0f0f0;
       border-radius: 999px;
       font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .rating {
+      font-size: 14px;
+      color: #888;
       margin-bottom: 20px;
     }
 
@@ -86,20 +85,33 @@
 
 <div id="content" class="loading">Loading product...</div>
 
-  
 <script>
 
-const BASE_ID = "appEonAf1g5YbUi7Q";   
-const TABLE_ID = "tblqIaDe6XJfHbKF5";            
-const INGREDIENT_TABLE = "Ingredients";   
-const TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";      
+/* =======================
+   AIRTABLE CONFIG
+======================= */
 
+const BASE_ID = "appEonAf1g5YbUi7Q";
+const TABLE_ID = "tblqIaDe6XJfHbKF5";      // products table
+const INGREDIENT_TABLE = "Ingredients";     // MUST match Airtable table name
+const TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";
 
-/* ---------------- INGREDIENT DB ---------------- */
+/* =======================
+   GET PRODUCT ID
+======================= */
+
+function getProductId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+/* =======================
+   INGREDIENT DATABASE
+======================= */
 
 async function loadIngredients() {
   const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${id}`,
+    `https://api.airtable.com/v0/${BASE_ID}/${INGREDIENT_TABLE}`,
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`
@@ -111,14 +123,15 @@ async function loadIngredients() {
 
   return data.records.map(r => ({
     name: r.fields["Ingredient"],
-    score: r.fields["Risk Score"] || 5,
+    score: Number(r.fields["Risk Score"]) || 5,
     level: r.fields["Risk Level"] || "Low",
     why: r.fields["Why"] || ""
   }));
 }
 
-
-/* ---------------- MATCH INGREDIENT ---------------- */
+/* =======================
+   MATCH INGREDIENT
+======================= */
 
 function getIngredientData(name, db) {
   return db.find(i =>
@@ -127,16 +140,9 @@ function getIngredientData(name, db) {
   );
 }
 
-
-/* ---------------- PRODUCT ID ---------------- */
-
-function getProductId() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
-
-
-/* ---------------- LOAD PRODUCT ---------------- */
+/* =======================
+   LOAD PRODUCT
+======================= */
 
 async function loadProduct() {
   const id = getProductId();
@@ -149,9 +155,9 @@ async function loadProduct() {
 
   try {
 
-    /* 1. LOAD PRODUCT */
+    /* 1. GET PRODUCT */
     const res = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`,
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${id}`,
       {
         headers: {
           Authorization: `Bearer ${TOKEN}`
@@ -172,30 +178,30 @@ async function loadProduct() {
 
     const imgUrl = p.image?.[0]?.url;
 
-
-    /* 2. LOAD INGREDIENT DATABASE */
+    /* 2. LOAD INGREDIENT DB */
     const ingredientDB = await loadIngredients();
 
+    /* 3. PARSE INGREDIENTS */
+    const list = p.ingredients
+      .split(",")
+      .map(i => i.replace(/\(.*?\)/g, "").trim())
+      .filter(Boolean);
 
-    /* 3. ANALYZE INGREDIENTS */
     let totalRisk = 0;
-
-    const list = p.ingredients.split(",").map(i => i.trim());
 
     list.forEach(i => {
       const match = getIngredientData(i, ingredientDB);
 
       if (match) {
-        totalRisk += Number(match.score);
+        totalRisk += match.score;
       } else {
-        totalRisk += 5; // unknown ingredient default risk
+        totalRisk += 5; // unknown ingredient
       }
     });
 
-    let productScore = Math.max(0, 100 - totalRisk);
+    const productScore = Math.max(0, Math.round(100 - totalRisk));
 
-
-    /* 4. RENDER PAGE */
+    /* 4. RENDER UI */
     document.getElementById("content").innerHTML = `
 
       <button onclick="window.location.href='index.html'"
@@ -218,7 +224,7 @@ async function loadProduct() {
       <div class="container">
 
         <div class="image-box">
-          ${imgUrl ? `<img src="${imgUrl}">` : ``}
+          ${imgUrl ? `<img src="${imgUrl}">` : ""}
         </div>
 
         <div class="info">
