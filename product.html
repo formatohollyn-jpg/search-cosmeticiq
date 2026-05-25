@@ -86,16 +86,57 @@
 
 <div id="content" class="loading">Loading product...</div>
 
+  
 <script>
 
-const BASE_ID = "apph6wlZKiRLkKk8k";
-const TABLE_NAME = "Table 1";
-const TOKEN = "patLs1otKsQ0kaiOT.a2b4021760d142c883cb2ad625fc6ae8a543b44eccdb4c3fa14dd75c19d612c0";
+const BASE_ID = "appEonAf1g5YbUi7Q";   
+const TABLE_ID = "tblqIaDe6XJfHbKF5";            
+const INGREDIENT_TABLE = "Ingredients";   
+const TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";      
+
+
+/* ---------------- INGREDIENT DB ---------------- */
+
+async function loadIngredients() {
+  const res = await fetch(
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    }
+  );
+
+  const data = await res.json();
+
+  return data.records.map(r => ({
+    name: r.fields["Ingredient"],
+    score: r.fields["Risk Score"] || 5,
+    level: r.fields["Risk Level"] || "Low",
+    why: r.fields["Why"] || ""
+  }));
+}
+
+
+/* ---------------- MATCH INGREDIENT ---------------- */
+
+function getIngredientData(name, db) {
+  return db.find(i =>
+    (i.name || "").toLowerCase().trim() ===
+    name.toLowerCase().trim()
+  );
+}
+
+
+/* ---------------- PRODUCT ID ---------------- */
 
 function getProductId() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
 }
+
+
+/* ---------------- LOAD PRODUCT ---------------- */
 
 async function loadProduct() {
   const id = getProductId();
@@ -107,6 +148,8 @@ async function loadProduct() {
   }
 
   try {
+
+    /* 1. LOAD PRODUCT */
     const res = await fetch(
       `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`,
       {
@@ -116,10 +159,6 @@ async function loadProduct() {
       }
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to load product");
-    }
-
     const r = await res.json();
 
     const p = {
@@ -127,53 +166,87 @@ async function loadProduct() {
       brand: r.fields["Brand"] || "",
       type: r.fields["Product Type"] || "",
       rating: r.fields["Rating"] || "N/A",
-      image: r.fields["Product Image"]
+      image: r.fields["Product Image"],
+      ingredients: r.fields["Ingredients"] || ""
     };
 
-  const imgUrl = p.image?.[0]?.url;
+    const imgUrl = p.image?.[0]?.url;
 
-document.getElementById("content").innerHTML = `
 
-  <button onclick="window.location.href='index.html'"
-    style="
-      position: absolute;
-      top: 30px;
-      left: 40px;
-      padding: 10px 14px;
-      border: none;
-      border-radius: 10px;
-      background:#9fb3a0;
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
-      z-index: 1000;
-    ">
-    ← Back to Search
-  </button>
+    /* 2. LOAD INGREDIENT DATABASE */
+    const ingredientDB = await loadIngredients();
 
-  <div class="container">
 
-    <div class="image-box">
-      ${imgUrl ? `<img src="${imgUrl}">` : `<div style="height:300px;background:#eee;border-radius:16px;"></div>`}
-    </div>
+    /* 3. ANALYZE INGREDIENTS */
+    let totalRisk = 0;
 
-    <div class="info">
-      <div class="name">${p.name}</div>
-      <div class="brand">${p.brand}</div>
+    const list = p.ingredients.split(",").map(i => i.trim());
 
-      <div class="type">${p.type}</div>
+    list.forEach(i => {
+      const match = getIngredientData(i, ingredientDB);
 
-      <div class="rating">⭐ ${p.rating}</div>
+      if (match) {
+        totalRisk += Number(match.score);
+      } else {
+        totalRisk += 5; // unknown ingredient default risk
+      }
+    });
 
-      <p style="color:#666;line-height:1.5;">
-        More product details will go here once you add more fields in Airtable.
-      </p>
-    </div>
+    let productScore = Math.max(0, 100 - totalRisk);
 
-  </div>
-`;
-    
+
+    /* 4. RENDER PAGE */
+    document.getElementById("content").innerHTML = `
+
+      <button onclick="window.location.href='index.html'"
+        style="
+          position: absolute;
+          top: 30px;
+          left: 40px;
+          padding: 10px 14px;
+          border: none;
+          border-radius: 10px;
+          background:#9fb3a0;
+          color: white;
+          cursor: pointer;
+          font-size: 14px;
+          z-index: 1000;
+        ">
+        ← Back to Search
+      </button>
+
+      <div class="container">
+
+        <div class="image-box">
+          ${imgUrl ? `<img src="${imgUrl}">` : ``}
+        </div>
+
+        <div class="info">
+          <div class="name">${p.name}</div>
+          <div class="brand">${p.brand}</div>
+          <div class="type">${p.type}</div>
+
+          <div class="rating">⭐ ${p.rating}</div>
+
+          <div style="
+            margin: 10px 0 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color:#846879;
+          ">
+            Safety Score: ${productScore} / 100
+          </div>
+
+          <p style="color:#666;line-height:1.5;">
+            This score is calculated from ingredient-level risk data.
+          </p>
+        </div>
+
+      </div>
+    `;
+
   } catch (err) {
+    console.log(err);
     document.getElementById("content").innerHTML =
       `<div class="error">Could not load product.</div>`;
   }
