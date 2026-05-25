@@ -387,14 +387,47 @@ async function loadProducts() {
 
     console.log(data);
 
-    products = data.records.map(r => ({
-      id: r.id,
-      name: r.fields["Product Name"] || "",
-      brand: r.fields["Brand"] || "",
-      type: r.fields["Product Type"] || "",
-      image: r.fields["Product Image"],
-      barcode: r.fields["Barcode"] || ""
-    }));
+   products = data.records.map(r => ({
+  id: r.id,
+  name: r.fields["Product Name"] || "",
+  brand: r.fields["Brand"] || "",
+  type: r.fields["Product Type"] || "",
+  image: r.fields["Product Image"],
+  barcode: r.fields["Barcode"] || "",
+  ingredients: r.fields["Ingredients"] || ""
+}));
+  
+    function calculateScore(ingredients, ingredientDB) {
+
+  if (!ingredients) return 50;
+
+  const list = ingredients
+    .split(",")
+    .map(i => i.trim())
+    .filter(Boolean);
+
+  let totalRisk = 0;
+
+  list.forEach(ing => {
+
+    const match = getIngredientData(ing, ingredientDB);
+
+    let score = 5;
+
+    if (match) {
+      score = Number(match.score);
+    }
+
+    totalRisk += score;
+  });
+
+  let score = Math.round(100 - (totalRisk / list.length));
+
+  if (score < 0) score = 0;
+  if (score > 100) score = 100;
+
+  return score;
+}
 
     document.getElementById("status").innerText =
       `Loaded ${products.length} products`;
