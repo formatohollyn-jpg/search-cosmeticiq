@@ -110,23 +110,34 @@ function getProductId() {
 ======================= */
 
 async function loadIngredients() {
-  const res = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/${INGREDIENT_TABLE}`,
-    {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
+  try {
+    const res = await fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/${INGREDIENT_TABLE}`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
       }
+    );
+
+    const data = await res.json();
+
+    if (!data.records) {
+      console.log("Ingredient API error:", data);
+      return [];
     }
-  );
 
-  const data = await res.json();
+    return data.records.map(r => ({
+      name: r.fields["Ingredient"],
+      score: Number(r.fields["Risk Score"]) || 5,
+      level: r.fields["Risk Level"] || "Low",
+      why: r.fields["Why"] || ""
+    }));
 
-  return data.records.map(r => ({
-    name: r.fields["Ingredient"],
-    score: Number(r.fields["Risk Score"]) || 5,
-    level: r.fields["Risk Level"] || "Low",
-    why: r.fields["Why"] || ""
-  }));
+  } catch (err) {
+    console.log("Ingredient fetch failed:", err);
+    return [];
+  }
 }
 
 /* =======================
