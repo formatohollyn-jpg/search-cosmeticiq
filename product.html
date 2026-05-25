@@ -313,8 +313,6 @@ async function loadProduct() {
 
       type: r.fields["Product Type"] || "",
 
-      rating: r.fields["Rating"] || "N/A",
-
       image: r.fields["Product Image"],
 
       ingredients: r.fields["Ingredients"] || ""
@@ -461,9 +459,9 @@ if (productScore > 100) {
 
           <div class="type">${p.type}</div>
 
-          <div class="rating">
-            ⭐ ${p.rating}
-          </div>
+        <div class="rating">
+  ✦ ${productScore}/100 BeautyIQ Score
+</div>
 
           <div class="score-box">
 
