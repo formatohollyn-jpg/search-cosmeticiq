@@ -157,7 +157,8 @@ function getIngredientData(name, db) {
 
 async function loadProduct() {
   const id = getProductId();
-
+console.log("PRODUCT ID:", id);
+  
   if (!id) {
     document.getElementById("content").innerHTML =
       `<div class="error">No product selected.</div>`;
@@ -177,6 +178,7 @@ async function loadProduct() {
     );
 
     const r = await res.json();
+    console.log("PRODUCT RESPONSE:", r);
 
     const p = {
       name: r.fields["Product Name"] || "Unnamed Product",
