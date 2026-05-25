@@ -458,33 +458,37 @@ async function loadProducts() {
 
     render(products);
 
-  } catch (err) {
+ } catch (err) {
 
-    console.log("LOAD PRODUCTS ERROR:", err);
+  console.log("LOAD PRODUCTS ERROR:", err);
 
-    document.getElementById("status").innerText =
-      "Loaded products (check console for issue)";
+  document.getElementById("status").innerText =
+    "Error loading products — check console";
+
+}
 
   }
 }
 
 /* ---------------- SCORE CALCULATION ---------------- */
-
+  
 function calculateScore(ingredients, ingredientDB) {
 
-  if (!ingredients) return 50;
+  if (!ingredients || typeof ingredients !== "string") return 50;
 
   const list = ingredients
     .split(",")
     .map(i => i.trim())
     .filter(Boolean);
 
+  if (list.length === 0) return 50;
+
   let totalRisk = 0;
 
   list.forEach(ing => {
 
-    const match = ingredientDB.find(i =>
-      i.name?.toLowerCase() === ing.toLowerCase()
+    const match = ingredientDB?.find(i =>
+      (i.name || "").toLowerCase() === ing.toLowerCase()
     );
 
     let score = 5;
@@ -498,10 +502,7 @@ function calculateScore(ingredients, ingredientDB) {
 
   let score = Math.round(100 - (totalRisk / list.length));
 
-  if (score < 0) score = 0;
-  if (score > 100) score = 100;
-
-  return score;
+  return Math.max(0, Math.min(100, score));
 }
 
 /* ---------------- RENDER ---------------- */
