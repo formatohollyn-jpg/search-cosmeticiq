@@ -413,7 +413,9 @@ async function loadIngredients() {
 /* ---------------- LOAD PRODUCTS ---------------- */
 
 async function loadProducts() {
+
   console.log("LOAD PRODUCTS STARTED");
+
   try {
 
     const res = await fetch(
@@ -433,7 +435,6 @@ async function loadProducts() {
       throw new Error("No records returned from Airtable");
     }
 
-    /* 1. build products */
     products = data.records.map(r => ({
       id: r.id,
       name: r.fields["Product Name"] || "",
@@ -444,29 +445,24 @@ async function loadProducts() {
       ingredients: r.fields["Ingredients"] || ""
     }));
 
-    /* 2. load ingredient database */
     const ingredientDB = await loadIngredients();
 
-    /* 3. attach scores */
     products = products.map(p => ({
       ...p,
       score: calculateScore(p.ingredients, ingredientDB)
     }));
 
-    /* 4. render */
     document.getElementById("status").innerText =
       `Loaded ${products.length} products`;
 
     render(products);
 
- } catch (err) {
+  } catch (err) {
 
-  console.log("LOAD PRODUCTS ERROR:", err);
+    console.log("LOAD PRODUCTS ERROR:", err);
 
-  document.getElementById("status").innerText =
-    "Error loading products — check console";
-
-}
+    document.getElementById("status").innerText =
+      "Error loading products — check console";
 
   }
 }
