@@ -204,6 +204,8 @@ async function loadIngredients() {
   );
 
   const data = await res.json();
+  
+ console.log("INGREDIENT COUNT:", data.records.length);
 
   console.log("INGREDIENT DATABASE:", data);
 
