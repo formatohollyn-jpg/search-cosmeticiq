@@ -243,8 +243,8 @@ function cleanIngredient(text) {
 
     .toLowerCase()
 
-    /* remove ALL parenthesis content */
-    .replace(/\s*\(.*?\)\s*/g, " ")
+    /* remove EVERYTHING in parentheses */
+    .replace(/\([^)]*\)/g, "")
 
     /* normalize slashes */
     .replace(/[\/\\]/g, " ")
