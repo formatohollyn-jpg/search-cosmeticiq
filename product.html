@@ -249,18 +249,16 @@ function cleanIngredient(text) {
     .trim();
 
 }
+function getIngredientData(ingredient, ingredientDB) {
 
-function getIngredientData(name, db) {
+  const cleanedIngredient =
+    cleanIngredient(ingredient);
 
-  const cleanedName = cleanIngredient(name);
+  return ingredientDB.find(item =>
 
-  return db.find(i => {
+    cleanIngredient(item.name) === cleanedIngredient
 
-    const dbName = cleanIngredient(i.name);
-
-    return dbName === cleanedName;
-
-  });
+  );
 
 }
 
