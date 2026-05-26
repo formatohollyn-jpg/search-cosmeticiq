@@ -243,17 +243,20 @@ function cleanIngredient(text) {
 
     .toLowerCase()
 
-    /* remove anything inside parentheses */
-    .replace(/\(.*?\)/g, "")
+    /* remove ALL parenthesis content */
+    .replace(/\s*\(.*?\)\s*/g, " ")
+
+    /* normalize slashes */
+    .replace(/[\/\\]/g, " ")
+
+    /* normalize dashes */
+    .replace(/[-–—]/g, " ")
 
     /* remove commas + periods */
     .replace(/[.,]/g, "")
 
-    /* normalize slashes */
-    .replace(/\//g, " ")
-
-    /* normalize dashes */
-    .replace(/-/g, " ")
+    /* remove weird invisible unicode spaces */
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
 
     /* collapse spaces */
     .replace(/\s+/g, " ")
