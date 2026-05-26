@@ -240,12 +240,24 @@ async function loadIngredients() {
 function cleanIngredient(text) {
 
   return (text || "")
+
     .toLowerCase()
+
+    /* remove anything inside parentheses */
+    .replace(/\(.*?\)/g, "")
+
+    /* remove commas + periods */
     .replace(/[.,]/g, "")
-    .replace(/[()]/g, "")
+
+    /* normalize slashes */
     .replace(/\//g, " ")
+
+    /* normalize dashes */
     .replace(/-/g, " ")
+
+    /* collapse spaces */
     .replace(/\s+/g, " ")
+
     .trim();
 
 }
