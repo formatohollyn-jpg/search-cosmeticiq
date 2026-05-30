@@ -65,6 +65,10 @@ body {
 
 @media (max-width: 768px) {
 
+   body {
+    padding: 0 12px;
+  }
+
   h1 {
     font-size: 38px !important;
   }
@@ -76,6 +80,7 @@ body {
 
   /* search bar */
   #searchInput {
+  box-sizing: border-box;
     padding: 14px 40px 14px 14px !important;
     font-size: 14px !important;
   }
@@ -93,9 +98,10 @@ body {
 
   /* grid products */
   #results {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 12px !important;
     padding: 10px !important;
+
   }
 
 }
