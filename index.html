@@ -62,10 +62,9 @@ body {
   100% { transform: translateX(0px); }
 }
 /* Desktop styles stay the same */
-
 @media (max-width: 768px) {
 
-   body {
+  body {
     padding: 0 12px;
   }
 
@@ -80,7 +79,7 @@ body {
 
   /* search bar */
   #searchInput {
-  box-sizing: border-box;
+    box-sizing: border-box;
     padding: 14px 40px 14px 14px !important;
     font-size: 14px !important;
   }
@@ -96,17 +95,21 @@ body {
     padding: 15px 15px !important;
   }
 
-  /* grid products */
+  /* grid */
   #results {
-    align-items: start;
+    align-items: stretch;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 10px !important;
     padding: 10px !important;
   }
 
-  /* product cards (IMPORTANT FIX) */
+  /* product cards */
   #results > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 10px !important;
+    justify-content: space-between;
   }
 
 }
