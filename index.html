@@ -65,38 +65,37 @@ body {
 
 @media (max-width: 768px) {
 
-  /* TITLE */
   h1 {
-    font-size: 40px !important;
-    margin-top: 80px !important;
+    font-size: 38px !important;
   }
 
-  /* PARAGRAPH */
   p {
     font-size: 14px !important;
     padding: 0 15px;
   }
 
-  /* SEARCH BAR WRAPPER */
-  div[style*="max-width:500px"] {
-    flex-direction: column !important;
-    width: 90% !important;
-  }
-
-  /* INPUT */
-  input {
+  /* search bar */
+  #searchInput {
+    padding: 14px 40px 14px 14px !important;
     font-size: 14px !important;
-    padding: 14px !important;
   }
 
-  /* BUTTON */
-  button {
-    width: 100% !important;
+  /* scan button */
+  #scanBtn {
+    padding: 14px 12px !important;
+    font-size: 13px !important;
   }
 
-  /* HEADER spacing fix */
-  div[style*="background: rgba(90, 65, 78"] {
-    padding: 15px !important;
+  /* header spacing */
+  div[style*="padding:20px 40px"] {
+    padding: 15px 15px !important;
+  }
+
+  /* grid products */
+  #results {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 10px !important;
   }
 
 }
