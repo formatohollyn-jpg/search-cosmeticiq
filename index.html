@@ -65,21 +65,38 @@ body {
 
 @media (max-width: 768px) {
 
+  /* TITLE */
   h1 {
-    font-size: 38px !important;
+    font-size: 40px !important;
+    margin-top: 80px !important;
   }
 
-  .container {
-    width: 100% !important;
-    padding: 10px !important;
+  /* PARAGRAPH */
+  p {
+    font-size: 14px !important;
+    padding: 0 15px;
   }
 
+  /* SEARCH BAR WRAPPER */
+  div[style*="max-width:500px"] {
+    flex-direction: column !important;
+    width: 90% !important;
+  }
+
+  /* INPUT */
   input {
     font-size: 14px !important;
+    padding: 14px !important;
   }
 
+  /* BUTTON */
   button {
-    font-size: 14px !important;
+    width: 100% !important;
+  }
+
+  /* HEADER spacing fix */
+  div[style*="background: rgba(90, 65, 78"] {
+    padding: 15px !important;
   }
 
 }
