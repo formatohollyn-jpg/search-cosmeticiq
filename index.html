@@ -98,10 +98,15 @@ body {
 
   /* grid products */
   #results {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 12px !important;
+    align-items: start;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
     padding: 10px !important;
+  }
 
+  /* product cards (IMPORTANT FIX) */
+  #results > div {
+    padding: 10px !important;
   }
 
 }
