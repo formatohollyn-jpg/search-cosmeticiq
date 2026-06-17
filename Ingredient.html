@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ingredient</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: linear-gradient(to bottom,#f7e8ef,#fff8f5);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.7);
+      padding: 24px;
+      border-radius: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th {
+      background: #f4e8ef;
+      color: #846879;
+      padding: 10px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .title {
+      font-size: 28px;
+      color: #846879;
+      font-weight: bold;
+    }
+
+    .loading {
+      text-align: center;
+      margin-top: 80px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="content" class="loading">Loading ingredient...</div>
+
+<script>
+
+const BASE_ID = "appEonAf1g5YbUi7Q";
+const TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";
+const TABLE = "Ingredients";
+
+function getIngredientName() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("name");
+}
+
+async function loadIngredient() {
+
+  const name = getIngredientName();
+
+  if (!name) {
+    document.getElementById("content").innerHTML = "No ingredient selected.";
+    return;
+  }
+
+  const url =
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`
+    }
+  });
+
+  const data = await res.json();
+
+  const ingredient = data.records.find(r =>
+    (r.fields["Ingredient"] || "").toLowerCase() === name.toLowerCase()
+  );
+
+  if (!ingredient) {
+    document.getElementById("content").innerHTML =
+      "Ingredient not found.";
+    return;
+  }
+
+  const f = ingredient.fields;
+
+  document.getElementById("content").innerHTML = `
+    <div class="container">
+
+      <div class="title">${f["Ingredient"]}</div>
+
+      <table>
+        <tr>
+          <th>Toxicological Evaluation</th>
+        </tr>
+        <tr>
+          <td>${f["Toxicological Evaluation"] || ""}</td>
+        </tr>
+
+        <tr>
+          <th>Dermal Absorption</th>
+        </tr>
+        <tr>
+          <td>${f["Dermal Absobtion"] || ""}</td>
+        </tr>
+
+        <tr>
+          <th>MoS</th>
+        </tr>
+        <tr>
+          <td>${f["MoS"] || ""}</td>
+        </tr>
+
+        <tr>
+          <th>Conclusion</th>
+        </tr>
+        <tr>
+          <td>${f["Conclusion"] || ""}</td>
+        </tr>
+      </table>
+
+    </div>
+  `;
+}
+
+loadIngredient();
+
+</script>
+
+</body>
+</html>
