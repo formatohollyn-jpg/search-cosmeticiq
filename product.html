@@ -388,14 +388,19 @@ async function loadProduct() {
         riskClass = "risk-high";
       }
 
-      ingredientHTML += `
-        <tr>
-          <td>${ingredient}</td>
-          <td>${score}</td>
-          <td class="${riskClass}">${level}</td>
-          <td>${why}</td>
-        </tr>
-      `;
+     ingredientHTML += `
+  <tr>
+    <td>
+      <a href="ingredient.html?name=${encodeURIComponent(ingredient)}"
+         style="color:#846879; text-decoration:none; font-weight:bold;">
+        ${ingredient}
+      </a>
+    </td>
+    <td>${score}</td>
+    <td class="${riskClass}">${level}</td>
+    <td>${why}</td>
+  </tr>
+`;
     });
 
 
