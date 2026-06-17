@@ -60,80 +60,112 @@ const BASE_ID = "appEonAf1g5YbUi7Q";
 const TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";
 const TABLE = "Ingredients";
 
+/* =========================
+   URL PARAM
+========================= */
 function getIngredientName() {
   const params = new URLSearchParams(window.location.search);
   return params.get("name");
 }
 
+/* =========================
+   CLEAN FUNCTION (IMPORTANT FIX)
+========================= */
+function clean(text) {
+  return (text || "")
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, "")
+    .replace(/[\/\\]/g, " ")
+    .replace(/[-–—]/g, " ")
+    .replace(/[.,]/g, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/* =========================
+   LOAD INGREDIENT
+========================= */
 async function loadIngredient() {
 
   const name = getIngredientName();
 
   if (!name) {
-    document.getElementById("content").innerHTML = "No ingredient selected.";
-    return;
-  }
-
-  const url =
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
-
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`
-    }
-  });
-
-  const data = await res.json();
-
-  const ingredient = data.records.find(r =>
-    (r.fields["Ingredient"] || "").toLowerCase() === name.toLowerCase()
-  );
-
-  if (!ingredient) {
     document.getElementById("content").innerHTML =
-      "Ingredient not found.";
+      "No ingredient selected.";
     return;
   }
 
-  const f = ingredient.fields;
+  try {
 
-  document.getElementById("content").innerHTML = `
-    <div class="container">
+    const url =
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
 
-      <div class="title">${f["Ingredient"]}</div>
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    });
 
-      <table>
-        <tr>
-          <th>Toxicological Evaluation</th>
-        </tr>
-        <tr>
-          <td>${f["Toxicological Evaluation"] || ""}</td>
-        </tr>
+    const data = await res.json();
 
-        <tr>
-          <th>Dermal Absorption</th>
-        </tr>
-        <tr>
-          <td>${f["Dermal Absorption"] || ""}</td>
-        </tr>
+    const cleanedName = clean(name);
 
-        <tr>
-          <th>Margin of Safety (MoS) Calculation</th>
-        </tr>
-        <tr>
-          <td>${f["Margin of Safety (MoS) Calculation"] || ""}</td>
-        </tr>
+    const ingredient = data.records.find(r =>
+      clean(r.fields["Ingredient"]) === cleanedName
+    );
 
-        <tr>
-          <th>Conclusion</th>
-        </tr>
-        <tr>
-          <td>${f["Conclusion"] || ""}</td>
-        </tr>
-      </table>
+    if (!ingredient) {
+      document.getElementById("content").innerHTML =
+        "Ingredient not found.";
+      return;
+    }
 
-    </div>
-  `;
+    const f = ingredient.fields;
+
+    document.getElementById("content").innerHTML = `
+      <div class="container">
+
+        <div class="title">${f["Ingredient"]}</div>
+
+        <table>
+          <tr>
+            <th>Toxicological Evaluation</th>
+          </tr>
+          <tr>
+            <td>${f["Toxicological Evaluation"] || ""}</td>
+          </tr>
+
+          <tr>
+            <th>Dermal Absorption</th>
+          </tr>
+          <tr>
+            <td>${f["Dermal Absorption"] || ""}</td>
+          </tr>
+
+          <tr>
+            <th>Margin of Safety (MoS) Calculation</th>
+          </tr>
+          <tr>
+            <td>${f["Margin of Safety (MoS) Calculation"] || ""}</td>
+          </tr>
+
+          <tr>
+            <th>Conclusion</th>
+          </tr>
+          <tr>
+            <td>${f["Conclusion"] || ""}</td>
+          </tr>
+        </table>
+
+      </div>
+    `;
+
+  } catch (err) {
+    console.log(err);
+    document.getElementById("content").innerHTML =
+      "Error loading ingredient.";
+  }
 }
 
 loadIngredient();
