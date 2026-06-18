@@ -106,14 +106,21 @@ async function loadIngredient() {
         Authorization: `Bearer ${TOKEN}`
       }
     });
+    
+const data = await res.json();
 
-    const data = await res.json();
+const cleanedName = clean(name);
 
-    const cleanedName = clean(name);
+console.log("URL NAME:", name);
+console.log("CLEANED URL NAME:", cleanedName);
 
-    const ingredient = data.records.find(r =>
-      clean(r.fields["Ingredient"]) === cleanedName
-    );
+data.records.forEach(r => {
+  console.log("AIRTABLE INGREDIENT:", r.fields["Ingredient"]);
+});
+
+const ingredient = data.records.find(r =>
+  clean(r.fields["Ingredient"]) === cleanedName
+);
 
     if (!ingredient) {
       document.getElementById("content").innerHTML =
