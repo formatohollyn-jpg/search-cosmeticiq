@@ -101,13 +101,31 @@ async function loadIngredient() {
     const url =
       `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
 
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
-    });
-    
-const data = await res.json();
+    let allRecords = [];
+let offset = null;
+
+do {
+
+  let url =
+    `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
+
+  if (offset) {
+    url += `?offset=${offset}`;
+  }
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`
+    }
+  });
+
+  const data = await res.json();
+
+  allRecords = [...allRecords, ...data.records];
+
+  offset = data.offset;
+
+} while (offset);
 
 const cleanedName = clean(name);
 
