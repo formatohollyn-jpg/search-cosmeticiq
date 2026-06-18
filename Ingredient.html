@@ -169,7 +169,7 @@ async function loadIngredient() {
     console.log("Searching for:", cleanedName);
 
     const ingredient = allRecords.find(r =>
-      clean(r.fields["Ingredient"]) === cleanedName
+      clean(r.fields["Ingredient Name"]) === cleanedName
     );
 
     if (!ingredient) {
