@@ -136,7 +136,7 @@ data.records.forEach(r => {
   console.log("AIRTABLE INGREDIENT:", r.fields["Ingredient"]);
 });
 
-const ingredient = data.records.find(r =>
+const ingredient = allRecords.find(r =>
   clean(r.fields["Ingredient"]) === cleanedName
 );
 
