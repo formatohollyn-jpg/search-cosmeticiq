@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: linear-gradient(to bottom,#f7e8ef,#fff8f5);
     }
 
@@ -17,6 +17,14 @@
       background: rgba(255,255,255,0.7);
       padding: 24px;
       border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #846879;
+      margin-bottom: 20px;
     }
 
     table {
@@ -28,132 +36,167 @@
     th {
       background: #f4e8ef;
       color: #846879;
-      padding: 10px;
       text-align: left;
+      padding: 12px;
     }
 
     td {
-      padding: 10px;
+      padding: 12px;
       border-bottom: 1px solid #eee;
-    }
-
-    .title {
-      font-size: 28px;
-      color: #846879;
-      font-weight: bold;
+      line-height: 1.6;
+      color: #444;
     }
 
     .loading {
       text-align: center;
       margin-top: 80px;
+      color: #666;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #9fb3a0;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
 
-<div id="content" class="loading">Loading ingredient...</div>
+<div id="content" class="loading">
+  Loading ingredient...
+</div>
 
 <script>
 
+/* =========================
+   AIRTABLE
+========================= */
+
 const BASE_ID = "appEonAf1g5YbUi7Q";
-const TOKEN = "pat3YpZtlMB9CDiNF.e5d36fe9c1752cf6fc8bb2c924577ccbb1707a3e63d970c8c401e142e99ec782";
+const TOKEN = "YOUR_TOKEN_HERE";
 const TABLE = "Ingredients";
 
 /* =========================
-   URL PARAM
+   GET URL PARAM
 ========================= */
+
 function getIngredientName() {
   const params = new URLSearchParams(window.location.search);
   return params.get("name");
 }
 
 /* =========================
-   CLEAN FUNCTION (IMPORTANT FIX)
+   CLEAN INGREDIENT NAMES
 ========================= */
+
 function clean(text) {
+
   return (text || "")
+
     .toLowerCase()
+
     .replace(/\([^)]*\)/g, "")
+
     .replace(/[\/\\]/g, " ")
+
     .replace(/[-–—]/g, " ")
+
     .replace(/[.,]/g, "")
+
     .replace(/[\u200B-\u200D\uFEFF]/g, "")
+
     .replace(/\s+/g, " ")
+
     .trim();
+
 }
 
 /* =========================
    LOAD INGREDIENT
 ========================= */
+
 async function loadIngredient() {
 
   const name = getIngredientName();
 
   if (!name) {
+
     document.getElementById("content").innerHTML =
       "No ingredient selected.";
+
     return;
   }
 
   try {
 
-    const url =
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
-
     let allRecords = [];
-let offset = null;
+    let offset = null;
 
-do {
+    do {
 
-  let url =
-    `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
+      let url =
+        `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
 
-  if (offset) {
-    url += `?offset=${offset}`;
-  }
+      if (offset) {
+        url += `?offset=${offset}`;
+      }
 
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`
-    }
-  });
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
+      });
 
-  const data = await res.json();
+      const data = await res.json();
 
-  allRecords = [...allRecords, ...data.records];
+      allRecords = [
+        ...allRecords,
+        ...data.records
+      ];
 
-  offset = data.offset;
+      offset = data.offset;
 
-} while (offset);
+    } while (offset);
 
-const cleanedName = clean(name);
+    const cleanedName = clean(name);
 
-console.log("URL NAME:", name);
-console.log("CLEANED URL NAME:", cleanedName);
+    console.log("Searching for:", cleanedName);
 
-data.records.forEach(r => {
-  console.log("AIRTABLE INGREDIENT:", r.fields["Ingredient"]);
-});
-
-const ingredient = allRecords.find(r =>
-  clean(r.fields["Ingredient"]) === cleanedName
-);
+    const ingredient = allRecords.find(r =>
+      clean(r.fields["Ingredient"]) === cleanedName
+    );
 
     if (!ingredient) {
+
       document.getElementById("content").innerHTML =
-        "Ingredient not found.";
+        `<div class="loading">Ingredient not found.</div>`;
+
       return;
     }
 
     const f = ingredient.fields;
 
     document.getElementById("content").innerHTML = `
+
       <div class="container">
 
-        <div class="title">${f["Ingredient"]}</div>
+        <a href="javascript:history.back()"
+           class="back-btn">
+          ← Back
+        </a>
+
+        <div class="title">
+          ${f["Ingredient"] || ""}
+        </div>
 
         <table>
+
           <tr>
             <th>Toxicological Evaluation</th>
           </tr>
@@ -181,16 +224,24 @@ const ingredient = allRecords.find(r =>
           <tr>
             <td>${f["Conclusion"] || ""}</td>
           </tr>
+
         </table>
 
       </div>
+
     `;
 
-  } catch (err) {
-    console.log(err);
-    document.getElementById("content").innerHTML =
-      "Error loading ingredient.";
   }
+
+  catch (err) {
+
+    console.error(err);
+
+    document.getElementById("content").innerHTML =
+      `<div class="loading">Error loading ingredient.</div>`;
+
+  }
+
 }
 
 loadIngredient();
