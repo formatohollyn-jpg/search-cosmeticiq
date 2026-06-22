@@ -111,38 +111,36 @@
       font-size:14px;
     }
 
- .ingredient-table th {
-  text-align:center;
-  padding:10px;
-  background:#f4e8ef;
-  color:#846879;
-}
-
 .ingredient-table td {
   padding:10px;
   border-bottom:1px solid #eee;
   text-align:center;
 }
 
-    .risk-low {
-      color:#b88700;
-      font-weight:bold;
-    }
+.risk-none {
+  color:#4f8f5a;
+  font-weight:bold;
+}
 
-    .risk-none {
-      color:#4f8f5a;
-      font-weight:bold;
-    }
+.risk-very-low {
+  color:#8ab17d;
+  font-weight:bold;
+}
 
-    .risk-moderate {
-      color:#d97706;
-      font-weight:bold;
-    }
+.risk-low {
+  color:#b88700;
+  font-weight:bold;
+}
 
-    .risk-high {
-      color:#c0392b;
-      font-weight:bold;
-    }
+.risk-moderate {
+  color:#d97706;
+  font-weight:bold;
+}
+
+.risk-high {
+  color:#c0392b;
+  font-weight:bold;
+}
 
   </style>
 </head>
@@ -375,17 +373,21 @@ async function loadProduct() {
 
       let riskClass = "risk-low";
 
-      if (level.toLowerCase().includes("no")) {
-        riskClass = "risk-none";
-      }
+if (level.toLowerCase().includes("no")) {
+  riskClass = "risk-none";
+}
 
-      if (level.toLowerCase().includes("moderate")) {
-        riskClass = "risk-moderate";
-      }
+if (level.toLowerCase().includes("very low")) {
+  riskClass = "risk-very-low";
+}
 
-      if (level.toLowerCase().includes("high")) {
-        riskClass = "risk-high";
-      }
+if (level.toLowerCase().includes("moderate")) {
+  riskClass = "risk-moderate";
+}
+
+if (level.toLowerCase().includes("high")) {
+  riskClass = "risk-high";
+}
 
      ingredientHTML += `
   <tr>
@@ -529,21 +531,25 @@ gap:20px;
 
     <strong>Risk Score Key (out of 100)</strong><br>
 
-    <span style="color:#4f8f5a; font-weight:bold;">
-      0–24 = No Risk
-    </span><br>
+<span style="color:#4f8f5a; font-weight:bold;">
+  0 = No Risk
+</span><br>
 
-    <span style="color:#b88700; font-weight:bold;">
-      25–49 = Low Risk
-    </span><br>
+<span style="color:#8ab17d; font-weight:bold;">
+  1–20 = Very Low Risk
+</span><br>
 
-    <span style="color:#d97706; font-weight:bold;">
-      50–74 = Moderate Risk
-    </span><br>
+<span style="color:#b88700; font-weight:bold;">
+  21–40 = Low Risk
+</span><br>
 
-    <span style="color:#c0392b; font-weight:bold;">
-      75–100 = High Risk
-    </span>
+<span style="color:#d97706; font-weight:bold;">
+  41–70 = Moderate Risk
+</span><br>
+
+<span style="color:#c0392b; font-weight:bold;">
+  71–100 = High Risk
+</span>
 
   </div>
 
