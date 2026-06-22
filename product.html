@@ -227,7 +227,6 @@ async function loadIngredients() {
     name: r.fields["Ingredient"],
     score: r.fields["Risk Score"] || 5,
     level: r.fields["Risk Level"] || "Low",
-    why: r.fields["Why"] || ""
   }));
 
 }
@@ -398,7 +397,6 @@ async function loadProduct() {
     </td>
     <td>${score}</td>
     <td class="${riskClass}">${level}</td>
-    <td>${why}</td>
   </tr>
 `;
     });
@@ -571,7 +569,6 @@ gap:20px;
                 <th>Ingredient</th>
                 <th>Risk Score</th>
                 <th>Risk Level</th>
-                <th>Why</th>
               </tr>
             </thead>
 
