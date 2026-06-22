@@ -225,8 +225,8 @@ async function loadIngredients() {
 
   return allRecords.map(r => ({
     name: r.fields["Ingredient"],
-    score: r.fields["Risk Score"] || 5,
-    level: r.fields["Risk Level"] || "Low",
+    score: r.fields["Risk Score"] || 0,
+    level: r.fields["Risk Level"] || "none",
   }));
 
 }
