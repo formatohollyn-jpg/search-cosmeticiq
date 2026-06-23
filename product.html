@@ -117,6 +117,11 @@
   text-align:center;
 }
 
+    .risk-unknown {
+  color: #846879;
+  font-weight: bold;
+} 
+    
 .risk-none {
   color:#8ab17d;
   font-weight:bold;
@@ -371,7 +376,7 @@ async function loadProduct() {
 
       totalRisk += score;
 
-      let riskClass = "risk-low";
+      let riskClass = "risk-unknown";
 
 if (level.toLowerCase().includes("no")) {
   riskClass = "risk-none";
