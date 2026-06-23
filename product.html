@@ -366,12 +366,10 @@ async function loadProduct() {
 
   let score = 5;
   let level = "UNKNOWN";
-  let why = "Ingredient not found in database yet.";
 
       if (match) {
         score = match.score;
         level = match.level;
-        why = match.why;
       }
 
       totalRisk += score;
