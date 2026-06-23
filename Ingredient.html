@@ -135,22 +135,22 @@ async function submitRequest() {
   }
 
   const response = await fetch(
-    `https://api.airtable.com/v0/${BASE_ID}/tblSRZLzKYDO14SAL`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        fields: {
-          Request: request,
-          Ingredient: currentIngredient,
-          Date: new Date().toISOString()
-        }
-      })
-    }
-  );
+  `https://api.airtable.com/v0/${appMdOGTy2Orxq6e8}/${tblSRZLzKYDO14SAL}`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${patrohXM8eXzh7VrX.e69a15034caaf48f95ac6a9825ebc1e20885e8917867ce4cf1929b8e589088cd}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      fields: {
+        Request: request,
+        Ingredient: currentIngredient,
+        Date: new Date().toISOString()
+      }
+    })
+  }
+);
 
   if (response.ok) {
 
