@@ -377,7 +377,10 @@ async function loadProduct() {
       totalRisk += score;
 
       let riskClass = "risk-unknown";
-
+    
+if (level === "UNKNOWN") {
+  riskClass = "risk-unknown"; 
+  
 if (level.toLowerCase().includes("no")) {
   riskClass = "risk-none";
 }
