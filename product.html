@@ -375,25 +375,21 @@ async function loadProduct() {
       }
 
       totalRisk += score;
+let riskClass = "risk-unknown";
 
-      let riskClass = "risk-unknown";
-    
-if (level === "UNKNOWN") {
-  riskClass = "risk-unknown"; 
-  
 if (level.toLowerCase().includes("no")) {
   riskClass = "risk-none";
 }
-
-if (level.toLowerCase().includes("very low")) {
+else if (level.toLowerCase().includes("very low")) {
   riskClass = "risk-very-low";
 }
-
-if (level.toLowerCase().includes("moderate")) {
+else if (level.toLowerCase().includes("low")) {
+  riskClass = "risk-low";
+}
+else if (level.toLowerCase().includes("moderate")) {
   riskClass = "risk-moderate";
 }
-
-if (level.toLowerCase().includes("high")) {
+else if (level.toLowerCase().includes("high")) {
   riskClass = "risk-high";
 }
 
