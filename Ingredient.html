@@ -135,35 +135,42 @@ async function submitRequest() {
     return;
   }
 
-  const response = await fetch(
-    `https://api.airtable.com/v0/${FEEDBACK_BASE_ID}/${FEEDBACK_TABLE_ID}`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${FEEDBACK_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        fields: {
-          Request: request,
-          Ingredient: currentIngredient,
-        }
-      })
-    }
-  );
-
-  if (response.ok) {
-
-    document.getElementById("requestBox").value = "";
-
-    document.getElementById("requestMessage").innerHTML =
-      "✓ Thank you! Your submission has been received.";
-
-  } else {
-
-    document.getElementById("requestMessage").innerHTML =
-      "Could not submit request.";
+const response = await fetch(
+  `https://api.airtable.com/v0/${FEEDBACK_BASE_ID}/${FEEDBACK_TABLE_ID}`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${FEEDBACK_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      fields: {
+        Request: request,
+        Ingredient: currentIngredient
+      }
+    })
   }
+);
+
+const result = await response.json();
+
+console.log("STATUS:", response.status);
+console.log("RESULT:", result);
+
+if (response.ok) {
+
+  document.getElementById("requestBox").value = "";
+
+  document.getElementById("requestMessage").innerHTML =
+    "✓ Thank you! Your submission has been received.";
+
+} else {
+
+  document.getElementById("requestMessage").innerHTML =
+    `Error ${response.status}: ${
+      result.error?.message || "Unknown error"
+    }`;
+
 }
 
 /* =========================
