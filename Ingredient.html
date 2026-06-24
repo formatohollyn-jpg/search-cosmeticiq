@@ -144,11 +144,11 @@ const response = await fetch(
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-     fields: {
-  Request: request,
-  Ingredient: currentIngredient,
-  Date: new Date().toLocaleDateString()
-}
+  fields: {
+    Request: request,
+    Ingredient: currentIngredient || "Unknown",
+    Date: new Date().toISOString().split("T")[0]
+  }
     })
   }
 );
